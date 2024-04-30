@@ -18,18 +18,20 @@ mp_drawing = mp.solutions.drawing_utils
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
 action = "가렵다"
 idx = 0
-folder_path = f"resized_videos_{idx}_10/"
+folder_path = f"resized_videos_{0}"
 seq_length = 30  # 프레임 길이(=윈도우)
 
 # 데이터 저장 경로
-save_path = "LSTM-Practice/dataset/"
+save_path = "dataset/"
 
 # 전체 데이터 저장할 배열 초기화
 data = []
 
 for video_file in os.listdir(folder_path):
     # 동영상 불러오기
+    print(video_file)
     video_path = os.path.join(folder_path, video_file)
+    print(video_path)
     cap = cv2.VideoCapture(video_path)
     created_time = int(time.time())
 
@@ -56,9 +58,9 @@ for video_file in os.listdir(folder_path):
                 # 손 -> 모든 관절에 대해 반복. 한 프레임에 왼손, 오른손 데이터가 0번부터 20번까지 들어감
                 for j, lm in enumerate(res.landmark):
                     if handedness.classification[0].label == 'Left':
-                        joint_left_hands[j] = [lm.x, lm.y, lm.z, 0]
+                        joint_left_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y, lm.z)]
                     else:
-                        joint_right_hands[j] = [lm.x, lm.y, lm.z, 0]
+                        joint_right_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y, lm.z)]
                 
                 # 손 랜드마크 그리기
                 if handedness.classification[0].label == 'Left':
@@ -73,16 +75,16 @@ for video_file in os.listdir(folder_path):
                 joint[j] = np.concatenate([joint_left_hands[j], joint_right_hands[j], [plm.x, plm.y, plm.z, plm.visibility]])
                 joint_pose[j] = [plm.x, plm.y, plm.z, plm.visibility]
 
-        # 좌표값만
-        d = np.array([joint.flatten()])
+        # 1) 좌표값만
+        # d = np.array([joint.flatten()])
 
-        # 데이터에 전체 랜드마크,각도값,인덱스 추가 (총 데이터 12*21+15*3+1 = 298개)
-        # d = np.concatenate([joint.flatten(), angleHands(joint_left_hands), angleHands(joint_right_hands), anglePose(joint_pose)])
+        # 2) 좌표값 + 손 각도값 + 포즈 각도값 (총 데이터 12*21+15*3+1 = 298개)
+        d = np.concatenate([joint.flatten(), angleHands(joint_left_hands), angleHands(joint_right_hands), anglePose(joint_pose)])
 
-        # 좌표값 + 손 각도값
+        # 3) 좌표값 + 손 각도값
         # d = np.concatenate([joint.flatten(), angleHands(joint_left_hands), angleHands(joint_right_hands)])
 
-        # 좌표값 + 포즈 각도값
+        # 4) 좌표값 + 포즈 각도값
         # d = np.concatenate([joint.flatten(), anglePose(joint_pose)])
 
         d = np.append(d, idx)
@@ -106,7 +108,7 @@ print("data[20]\n", data[20])
 # 시퀀스 데이터 저장
 full_seq_data = [data[seq:seq + seq_length] for seq in range(len(data) - seq_length)]
 full_seq_data = np.array(full_seq_data)
-np.save(os.path.join(save_path, f'2_seq_not_{action}_{created_time}'), full_seq_data)
+np.save(os.path.join(save_path, f'seq_{action}_{created_time}'), full_seq_data)
 print("seq data shape:", action, full_seq_data.shape)
 
 # 사용된 함수, 자원 해제

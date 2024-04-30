@@ -2,8 +2,8 @@ import numpy as np
 
 
 def angleHands(joint_hands):
-    # 가시성 정보가 0인 경우 모든 값을 0으로 설정하여 반환
-    if (joint_hands[:, 3] == 0).any():
+    # 가시성 정보가 0인 경우 모든 값을 0으로 반환
+    if (joint_hands[:, 3] == 0).all:
         return np.zeros((15,))
     
     # 관절 간의 각도 계산
@@ -27,8 +27,8 @@ def angleHands(joint_hands):
 
 
 def anglePose(joint_pose):
-    # 가시성 정보가 0인 경우 모든 값을 0으로 설정하여 반환
-    if (joint_pose[:, 3] == 0).any():
+    # 가시성 정보가 0인 경우 모든 값을 0으로 반환
+    if (joint_pose[:, 3] == 0).all():
         return np.zeros((15,))
     
     v1 = joint_pose[[0, 2, 0, 1, 0, 0, 7, 8, 8, 8, 10, 12, 12, 12, 7, 7, 9, 11, 11, 11], :3]
