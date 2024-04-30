@@ -29,9 +29,7 @@ data = []
 
 for video_file in os.listdir(folder_path):
     # 동영상 불러오기
-    print(video_file)
     video_path = os.path.join(folder_path, video_file)
-    print(video_path)
     cap = cv2.VideoCapture(video_path)
     created_time = int(time.time())
 
@@ -103,7 +101,7 @@ for video_file in os.listdir(folder_path):
 # 넘파이 배열로 생성
 data = np.array(data)
 print("data shape: ", action, data.shape)
-print("data[20]\n", data[20])
+print("data[20]\n", data[10])
 
 # 시퀀스 데이터 저장
 full_seq_data = [data[seq:seq + seq_length] for seq in range(len(data) - seq_length)]

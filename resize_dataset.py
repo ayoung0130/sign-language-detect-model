@@ -19,11 +19,12 @@ output_folder = "resized_videos_0"
 os.makedirs(output_folder, exist_ok=True)
 
 # 너비, 높이 설정
-new_width = 530
-new_height = 300
+# 원본 영상과 비율은 동일하게 유지. 1280x720(1.78:1)
+new_width = 712
+new_height = 400
 
 # 픽셀 크기 설정
-distance_from_center = 200
+distance_from_center = 300
 
 center_x = new_width // 2
 center_y = new_height // 2
