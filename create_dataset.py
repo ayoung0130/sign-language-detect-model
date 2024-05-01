@@ -18,7 +18,7 @@ mp_drawing = mp.solutions.drawing_utils
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
 action = "가렵다"
 idx = 0
-folder_path = f"resized_videos_{0}"
+folder_path = f"C:/Users/mshof/Desktop/video/resized_video_0"
 seq_length = 30  # 프레임 길이(=윈도우)
 
 # 데이터 저장 경로
@@ -56,9 +56,9 @@ for video_file in os.listdir(folder_path):
                 # 손 -> 모든 관절에 대해 반복. 한 프레임에 왼손, 오른손 데이터가 0번부터 20번까지 들어감
                 for j, lm in enumerate(res.landmark):
                     if handedness.classification[0].label == 'Left':
-                        joint_left_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y, lm.z)]
+                        joint_left_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y)]
                     else:
-                        joint_right_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y, lm.z)]
+                        joint_right_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y)]
                 
                 # 손 랜드마크 그리기
                 if handedness.classification[0].label == 'Left':
@@ -66,18 +66,22 @@ for video_file in os.listdir(folder_path):
                 else:
                     mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS, landmark_drawing_spec=mp_drawing.DrawingSpec(color=(255, 0, 0)))   # blue
 
+        # 포즈 검출시
         if results_pose.pose_landmarks is not None:
-            # 전체 데이터(joint) 생성, 포즈 -> 지정한 관절에 대해서만 반복
+            # 전체 데이터(joint) 생성 / 포즈 -> 지정한 관절에 대해서만 반복
             for j, i in enumerate(pose_landmark_indices):
                 plm = results_pose.pose_landmarks.landmark[i]
                 joint[j] = np.concatenate([joint_left_hands[j], joint_right_hands[j], [plm.x, plm.y, plm.z, plm.visibility]])
                 joint_pose[j] = [plm.x, plm.y, plm.z, plm.visibility]
 
+            # 포즈 랜드마크 그리기
+            mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+
         # 1) 좌표값만
-        # d = np.array([joint.flatten()])
+        d = np.array([joint.flatten()])
 
         # 2) 좌표값 + 손 각도값 + 포즈 각도값 (총 데이터 12*21+15*3+1 = 298개)
-        d = np.concatenate([joint.flatten(), angleHands(joint_left_hands), angleHands(joint_right_hands), anglePose(joint_pose)])
+        # d = np.concatenate([joint.flatten(), angleHands(joint_left_hands), angleHands(joint_right_hands), anglePose(joint_pose)])
 
         # 3) 좌표값 + 손 각도값
         # d = np.concatenate([joint.flatten(), angleHands(joint_left_hands), angleHands(joint_right_hands)])
@@ -85,15 +89,13 @@ for video_file in os.listdir(folder_path):
         # 4) 좌표값 + 포즈 각도값
         # d = np.concatenate([joint.flatten(), anglePose(joint_pose)])
 
+        # 인덱스 추가
         d = np.append(d, idx)
         
         # 전체 데이터를 배열에 추가
         data.append(d)
 
-        #포즈 랜드마크 그리기
-        mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
-
-        #영상을 화면에 표시
+        # 영상을 화면에 표시
         cv2.imshow('MediaPipe', frame)
         if cv2.waitKey(1) == ord('q'):
             break
