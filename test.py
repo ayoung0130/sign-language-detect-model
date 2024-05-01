@@ -3,12 +3,13 @@ import mediapipe as mp
 import numpy as np
 from setting import setVisibility
 from keras.models import load_model
+from collections import Counter
 
-actions = ['가렵다', '기절', '부러지다']
+actions = ['가렵다', '기절', '부러지다', '어제', '어지러움']
 seq_length = 30
 
 # 모델 불러오기
-model = load_model('LSTM-Practice/models/model.h5')
+model = load_model('models/model.h5')
 
 # 미디어 파이프 모델 초기화
 mp_hands = mp.solutions.hands
@@ -21,11 +22,15 @@ pose_landmark_indices = [0, 2, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 1
 mp_drawing = mp.solutions.drawing_utils
 
 # 웹캠 또는 비디오 파일 설정
-video_source = "resized_videos_2_20/9_부러지다(정).avi"  # 웹캠을 사용하려면 0 또는 웹캠 장치 번호를 사용
+video_source = 0  # 웹캠을 사용하려면 0 또는 웹캠 장치 번호를 사용
 cap = cv2.VideoCapture(video_source)
 
 # 전체 데이터 저장할 배열 초기화
 data = []
+
+frame_len = 0
+prev_action = None
+consecutive_count = 0
 
 while cap.isOpened():
     ret, frame = cap.read()
@@ -50,9 +55,9 @@ while cap.isOpened():
             # 손 -> 모든 관절에 대해 반복. 한 프레임에 왼손, 오른손 데이터가 0번부터 20번까지 들어감
             for j, lm in enumerate(res.landmark):
                 if handedness.classification[0].label == 'Left':
-                    joint_left_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y, lm.z)]
+                    joint_left_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y)]
                 else:
-                    joint_right_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y, lm.z)]
+                    joint_right_hands[j] = [lm.x, lm.y, lm.z, setVisibility(lm.x, lm.y)]
                 
             # 손 랜드마크 그리기
             if handedness.classification[0].label == 'Left':
@@ -65,10 +70,10 @@ while cap.isOpened():
         for j, i in enumerate(pose_landmark_indices):
             plm = results_pose.pose_landmarks.landmark[i]
             joint[j] = np.concatenate([joint_left_hands[j], joint_right_hands[j], [plm.x, plm.y, plm.z, plm.visibility]])
-            joint_pose[j] = [plm.x, plm.y, plm.z, plm.visibility]
 
         # 포즈 랜드마크 그리기
         mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+
 
     data.append(joint.flatten())
 
@@ -76,20 +81,35 @@ while cap.isOpened():
     cv2.imshow('MediaPipe', frame)
     if cv2.waitKey(1) == ord('q'):
         break
+    
+    if frame_len >= seq_length:
+        np_data = np.array(data)
 
-data = np.array(data)
+        # 시퀀스 데이터
+        seq_data = np.array([np_data[seq:seq + seq_length] for seq in range(len(np_data) - seq_length)])
+        print(seq_data)
+        print(seq_data.shape)
 
-# 시퀀스 데이터 생성
-full_seq_data = [data[seq:seq + seq_length] for seq in range(len(data) - seq_length)]
-full_seq_data = np.array(full_seq_data)
-print(full_seq_data.shape)
+        # 모델로 예측 수행
+        prediction = model.predict(seq_data)
+        pred = int(np.argmax(prediction))
 
-# 모델로 예측 수행
-prediction = model.predict(full_seq_data)
-i_pred = int(np.argmax(prediction))
-print(i_pred)
-action = actions[i_pred]
-print(action)
+        print(actions[pred])
+
+    frame_len += 1
+
+# # 이전 동작과 현재 동작이 같은지 확인
+# if action == prev_action:
+#     consecutive_count += 1
+# else:
+#     consecutive_count = 1
+
+# # 연속으로 같은 동작이 5프레임 이상 나타나면 출력
+# if consecutive_count >= 5:
+#     cv2.putText(frame, action, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
+# # 이전 동작 업데이트
+# prev_action = action
 
 cap.release()
 cv2.destroyAllWindows()
