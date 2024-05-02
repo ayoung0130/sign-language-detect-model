@@ -3,10 +3,11 @@ import mediapipe as mp
 import numpy as np
 from setting import setVisibility
 from keras.models import load_model
-from collections import Counter
+from PIL import ImageFont, ImageDraw, Image
 
 actions = ['가렵다', '기절', '부러지다', '어제', '어지러움']
 seq_length = 30
+font = ImageFont.truetype('fonts/MaruBuri-Bold.ttf', 30)
 
 # 모델 불러오기
 model = load_model('models/model.h5')
@@ -25,12 +26,8 @@ mp_drawing = mp.solutions.drawing_utils
 video_source = 0  # 웹캠을 사용하려면 0 또는 웹캠 장치 번호를 사용
 cap = cv2.VideoCapture(video_source)
 
-# 전체 데이터 저장할 배열 초기화
-data = []
-
-frame_len = 1
-prev_action = None
-consecutive_count = 0
+seq = []
+action_seq = []
 
 while cap.isOpened():
     ret, frame = cap.read()
@@ -65,6 +62,7 @@ while cap.isOpened():
             else:
                 mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS, landmark_drawing_spec=mp_drawing.DrawingSpec(color=(255, 0, 0)))   # blue
     
+    # 포즈 검출시
     if results_pose.pose_landmarks is not None:
         # 전체 데이터(joint) 생성, 포즈 -> 지정한 관절에 대해서만 반복
         for j, i in enumerate(pose_landmark_indices):
@@ -74,49 +72,41 @@ while cap.isOpened():
         # 포즈 랜드마크 그리기
         mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
-    data.append(joint.flatten())
+    d = np.array(joint.flatten())
+
+    seq.append(d)
+
+    if len(seq) < seq_length:
+        continue
+
+    input_data = np.expand_dims(np.array(seq[-seq_length:], dtype=np.float32), axis=0)
+    
+    y_pred = model.predict(input_data).squeeze()
+
+    i_pred = int(np.argmax(y_pred))
+    conf = y_pred[i_pred]
+
+    if conf > 0.95 and results_hands.multi_hand_landmarks is not None:
+
+        action = actions[i_pred]
+        print(action)
+        action_seq.append(action)
+
+        if len(action_seq) < 5 :
+            continue
+
+        if action_seq[-1] == action_seq[-2] == action_seq[-3] == action_seq[-4] == action_seq[-5]:
+            img_pil = Image.fromarray(frame)
+            draw = ImageDraw.Draw(img_pil)
+            draw.text((40,40), action, font=font, fill=(255,255,255))
+            frame = np.array(img_pil)
+    else:
+        cv2.putText(frame, '-', org=(50,50), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2)
 
     # 화면에 표시
     cv2.imshow('MediaPipe', frame)
     if cv2.waitKey(1) == ord('q'):
         break
-    
-    if frame_len == 2 * seq_length:
-        np_data = np.array(data)
-        print(np_data.shape)
-
-        # 시퀀스 데이터
-        seq_data = np.array([np_data[seq:seq + seq_length] for seq in range(len(np_data) - seq_length)])
-
-        # 모델로 예측 수행
-        prediction = model.predict(seq_data)
-
-        # 시퀀스별 예측값의 평균 계산
-        avg_prediction = np.mean(prediction, axis=0)
-
-        # 최종 예측값 출력
-        pred = np.argmax(avg_prediction)
-        print(actions[pred])
-        action = actions[pred]
-        cv2.putText(frame, f'{this_action.upper()}', org=(int(res.landmark[0].x * frame.shape[1]), int(res.landmark[0].y * frame.shape[0] + 20)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2)
-
-        data = []
-        frame_len = 0
-
-    frame_len += 1
-
-# # 이전 동작과 현재 동작이 같은지 확인
-# if action == prev_action:
-#     consecutive_count += 1
-# else:
-#     consecutive_count = 1
-
-# # 연속으로 같은 동작이 5프레임 이상 나타나면 출력
-# if consecutive_count >= 5:
-#     cv2.putText(frame, action, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
-
-# # 이전 동작 업데이트
-# prev_action = action
 
 cap.release()
 cv2.destroyAllWindows()
