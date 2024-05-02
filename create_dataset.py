@@ -16,13 +16,13 @@ mp_drawing = mp.solutions.drawing_utils
 
 # 동영상 파일 설정
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
-action = "어지러움"
-idx = 4
-folder_path = f"C:/Users/mshof/Desktop/video/resized_video_{idx}"
+action = "가렵다"
+idx = 0
+folder_path = f"C:/Users/_/Desktop/video/resized_video_{idx}"
 seq_length = 30  # 프레임 길이(=윈도우)
 
 # 데이터 저장 경로
-save_path = "dataset/"
+save_path = "C:/Users/_/Desktop/seq_data/"
 
 # 전체 데이터 저장할 배열 초기화
 data = []
@@ -103,7 +103,7 @@ for video_file in os.listdir(folder_path):
 # 넘파이 배열로 생성
 data = np.array(data)
 print("data shape: ", action, data.shape)
-print("data[20]\n", data[10])
+print("data[20]\n", data[20])
 
 # 시퀀스 데이터 저장
 full_seq_data = [data[seq:seq + seq_length] for seq in range(len(data) - seq_length)]

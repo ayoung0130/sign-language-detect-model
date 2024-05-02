@@ -5,7 +5,8 @@ from setting import setVisibility
 from keras.models import load_model
 from PIL import ImageFont, ImageDraw, Image
 
-actions = ['가렵다', '기절', '부러지다', '어제', '어지러움']
+# 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
+actions = ['가렵다', '기절', '부러지다', '어제', '어지러움', '열나다', '오늘', '진통제', '창백하다', '토하다']
 seq_length = 30
 font = ImageFont.truetype('fonts/MaruBuri-Bold.ttf', 30)
 
@@ -23,7 +24,7 @@ pose_landmark_indices = [0, 2, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 1
 mp_drawing = mp.solutions.drawing_utils
 
 # 웹캠 또는 비디오 파일 설정
-video_source = 0  # 웹캠을 사용하려면 0 또는 웹캠 장치 번호를 사용
+video_source = 0  # 웹캠 사용시 0, 비디오 파일 사용시 경로명 입력
 cap = cv2.VideoCapture(video_source)
 
 seq = []
@@ -42,7 +43,6 @@ while cap.isOpened():
     # 관절 정보 저장할 넘파이 배열 초기화
     joint_left_hands = np.zeros((21, 4))
     joint_right_hands = np.zeros((21, 4))
-    joint_pose = np.zeros((21, 4))
     joint = np.zeros((21, 12))
 
     # 손 검출시
@@ -86,8 +86,7 @@ while cap.isOpened():
     i_pred = int(np.argmax(y_pred))
     conf = y_pred[i_pred]
 
-    if conf > 0.95 and results_hands.multi_hand_landmarks is not None:
-
+    if conf > 0.90 and results_hands.multi_hand_landmarks is not None:
         action = actions[i_pred]
         print(action)
         action_seq.append(action)
