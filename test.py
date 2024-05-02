@@ -28,7 +28,7 @@ cap = cv2.VideoCapture(video_source)
 # 전체 데이터 저장할 배열 초기화
 data = []
 
-frame_len = 0
+frame_len = 1
 prev_action = None
 consecutive_count = 0
 
@@ -74,7 +74,6 @@ while cap.isOpened():
         # 포즈 랜드마크 그리기
         mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
-
     data.append(joint.flatten())
 
     # 화면에 표시
@@ -82,19 +81,27 @@ while cap.isOpened():
     if cv2.waitKey(1) == ord('q'):
         break
     
-    if frame_len >= seq_length:
+    if frame_len == 2 * seq_length:
         np_data = np.array(data)
+        print(np_data.shape)
 
         # 시퀀스 데이터
         seq_data = np.array([np_data[seq:seq + seq_length] for seq in range(len(np_data) - seq_length)])
-        print(seq_data)
-        print(seq_data.shape)
 
         # 모델로 예측 수행
         prediction = model.predict(seq_data)
-        pred = int(np.argmax(prediction))
 
+        # 시퀀스별 예측값의 평균 계산
+        avg_prediction = np.mean(prediction, axis=0)
+
+        # 최종 예측값 출력
+        pred = np.argmax(avg_prediction)
         print(actions[pred])
+        action = actions[pred]
+        cv2.putText(frame, f'{this_action.upper()}', org=(int(res.landmark[0].x * frame.shape[1]), int(res.landmark[0].y * frame.shape[0] + 20)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2)
+
+        data = []
+        frame_len = 0
 
     frame_len += 1
 
