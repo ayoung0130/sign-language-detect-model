@@ -3,7 +3,7 @@ import numpy as np
 from setting import actions, seq_length, font
 from keras.models import load_model
 from PIL import ImageFont, ImageDraw, Image
-from get_landmarks import getLandmarks
+from landmark_processing import get_landmarks
 
 # 모델 불러오기
 model = load_model('models/model_xyz.h5')
@@ -23,7 +23,7 @@ while cap.isOpened():
     frame_count += 1
 
     # 랜드마크, 프레임 가져오기
-    d, frame = getLandmarks(frame)
+    d, frame = get_landmarks(frame)
     
     # 전체 데이터 배열에 추가
     data.append(d)
