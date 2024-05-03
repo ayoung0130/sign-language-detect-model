@@ -2,27 +2,18 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import os, time
-from setting import angleHands, anglePose, setVisibility
-
-# 미디어 파이프 모델 초기화
-mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.5, min_tracking_confidence=0.5)
-
-mp_pose = mp.solutions.pose
-pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
-pose_landmark_indices = [0, 2, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-
-mp_drawing = mp.solutions.drawing_utils
+from setting import angleHands, anglePose, setVisibility, seq_length
+from init_mediapipe import mp_hands, mp_pose, hands, pose, pose_landmark_indices, mp_drawing
 
 # 동영상 파일 설정
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
 action = "가렵다"
 idx = 0
-folder_path = f"C:/Users/_/Desktop/video/resized_video_{idx}"
-seq_length = 30  # 프레임 길이(=윈도우)
+folder_path = f"C:/Users/mshof/Desktop/video/resized_video_{idx}"
+seq_length = 60  # 프레임 길이(=윈도우. 시퀀스)
 
 # 데이터 저장 경로
-save_path = "C:/Users/_/Desktop/seq_data/"
+save_path = "C:/Users/mshof/Desktop/seq_data_0503/"
 
 # 전체 데이터 저장할 배열 초기화
 data = []
@@ -78,10 +69,10 @@ for video_file in os.listdir(folder_path):
             mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
         # 1) 좌표값만
-        d = np.array([joint.flatten()])
+        # d = np.array([joint.flatten()])
 
         # 2) 좌표값 + 손 각도값 + 포즈 각도값 (총 데이터 12*21+15*3+1 = 298개)
-        # d = np.concatenate([joint.flatten(), angleHands(joint_left_hands), angleHands(joint_right_hands), anglePose(joint_pose)])
+        d = np.concatenate([joint.flatten(), angleHands(joint_left_hands), angleHands(joint_right_hands), anglePose(joint_pose)])
 
         # 3) 좌표값 + 손 각도값
         # d = np.concatenate([joint.flatten(), angleHands(joint_left_hands), angleHands(joint_right_hands)])
@@ -103,7 +94,7 @@ for video_file in os.listdir(folder_path):
 # 넘파이 배열로 생성
 data = np.array(data)
 print("data shape: ", action, data.shape)
-print("data[20]\n", data[20])
+print("data[20]\n", data[20:22])
 
 # 시퀀스 데이터 저장
 full_seq_data = [data[seq:seq + seq_length] for seq in range(len(data) - seq_length)]

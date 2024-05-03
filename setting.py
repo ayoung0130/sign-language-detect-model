@@ -1,5 +1,9 @@
 import numpy as np
+from PIL import ImageFont
 
+actions = ['가렵다', '기절', '부러지다', '어제', '어지러움', '열나다', '오늘', '진통제', '창백하다', '토하다']
+seq_length = 60
+font = ImageFont.truetype('fonts/NanumGothicBold.ttf', 25)
 
 def angleHands(joint_hands):
     # 관절 간의 각도 계산
@@ -26,7 +30,6 @@ def anglePose(joint_pose):
     v2 = joint_pose[[2, 4, 1, 3, 5, 6, 8, 7, 10, 20, 12, 14, 16, 18, 9, 19, 11, 13, 15, 17], :3]
     # 0, 2, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
     # 0, 1, 2, 3, 4, 5, 6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
-
     v = v2 - v1
 
     v = v / np.linalg.norm(v, axis=1)[:, np.newaxis]
