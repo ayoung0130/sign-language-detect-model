@@ -67,4 +67,4 @@ for video_file in video_files:
     out.release()
 
 print("영상 크기 조절 및 저장 완료")
-# 가렵다(정) 2.03MB -> 134KB
+# 가렵다(정) 2.03MB -> 116KB
