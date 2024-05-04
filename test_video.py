@@ -6,7 +6,7 @@ from PIL import ImageDraw, Image
 from landmark_processing import get_landmarks
 
 # 모델 불러오기
-model = load_model('models/model_xyz.h5')
+model = load_model('models/model_pad.h5')
 
 # 비디오 파일 설정
 video_source = f"C:/Users/mshof/Desktop/video/test_video"

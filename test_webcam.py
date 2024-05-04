@@ -6,7 +6,7 @@ from PIL import ImageFont, ImageDraw, Image
 from landmark_processing import get_landmarks
 
 # 모델 불러오기
-model = load_model('models/model_xyz.h5')
+model = load_model('models/model_pad.h5')
 
 # 웹캠 설정
 cap = cv2.VideoCapture(0)
@@ -15,7 +15,7 @@ data = []
 action = '수어 동작을 시작하세요'
 frame_count = 0
 
-seq_length = 30
+seq_length = 60
 
 while cap.isOpened():
     ret, frame = cap.read()
@@ -31,7 +31,7 @@ while cap.isOpened():
     data.append(d)
 
     # 프레임 길이가 시퀀스 길이보다 클 경우 예측 수행
-    if frame_count > 50:
+    if frame_count > 70:
         data = np.array(data)
 
         full_seq_data = [data[seq:seq + seq_length] for seq in range(len(data) - seq_length)]

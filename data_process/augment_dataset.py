@@ -2,8 +2,8 @@ import numpy as np
 import os
 
 folder_path = "C:/Users/mshof/Desktop/pad_npy_data"
-# save_path = "C:/Users/mshof/Desktop/flip_npy_data"
-save_path = "C:/Users/mshof/Desktop/shift_npy_data"
+save_path = "C:/Users/mshof/Desktop/flip_npy_data"
+# save_path = "C:/Users/mshof/Desktop/shift_npy_data"
 
 def flip(folder_path):
     for npy_file in os.listdir(folder_path):
@@ -45,5 +45,5 @@ def shift(folder_path):
         np.save(os.path.join(save_path, "shift_" + base_name), data)
 
 
-# flip(folder_path)
-shift(folder_path)
+flip(folder_path)
+# shift(folder_path)
