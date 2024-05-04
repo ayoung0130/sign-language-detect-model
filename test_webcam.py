@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from setting import actions, seq_length, font
+from setting import actions, font
 from keras.models import load_model
 from PIL import ImageFont, ImageDraw, Image
 from landmark_processing import get_landmarks
@@ -14,6 +14,8 @@ cap = cv2.VideoCapture(0)
 data = []
 action = '수어 동작을 시작하세요'
 frame_count = 0
+
+seq_length = 30
 
 while cap.isOpened():
     ret, frame = cap.read()
@@ -29,7 +31,7 @@ while cap.isOpened():
     data.append(d)
 
     # 프레임 길이가 시퀀스 길이보다 클 경우 예측 수행
-    if frame_count > seq_length:
+    if frame_count > 50:
         data = np.array(data)
 
         full_seq_data = [data[seq:seq + seq_length] for seq in range(len(data) - seq_length)]

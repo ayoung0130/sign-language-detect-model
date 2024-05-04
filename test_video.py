@@ -1,6 +1,6 @@
 import cv2, os, random
 import numpy as np
-from setting import actions, seq_length, font
+from setting import actions, font
 from keras.models import load_model
 from PIL import ImageDraw, Image
 from landmark_processing import get_landmarks
@@ -14,6 +14,8 @@ video_source = f"C:/Users/mshof/Desktop/video/test_video"
 # 동영상 파일 목록 랜덤으로 섞기
 video_files = os.listdir(video_source)
 random.shuffle(video_files)
+
+seq_length = 30
 
 action = '수어 동작을 시작하세요'
 

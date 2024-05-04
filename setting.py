@@ -14,6 +14,6 @@ mp_drawing = mp.solutions.drawing_utils
 
 actions = ['가렵다', '기절', '부러지다', '어제', '어지러움', '열나다', '오늘', '진통제', '창백하다', '토하다']
 
-seq_length = 60
+seq_length = 30
 
 font = ImageFont.truetype('fonts/NanumGothicBold.ttf', 25)

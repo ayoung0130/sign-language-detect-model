@@ -44,8 +44,8 @@ def get_landmarks(frame) :
         # 포즈 랜드마크 그리기
         mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
-    # 좌표값만 (총 데이터 4*21*3 = 252)
-    return np.array([joint.flatten()]), frame
+    # 좌표값만 (총 데이터 4*21*3 = 252) []
+    return np.array(joint.flatten()), frame
 
 
 def angle_hands(joint_hands):
