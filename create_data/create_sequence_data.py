@@ -1,7 +1,7 @@
 import numpy as np
 import os, time
 
-folder_path = f"C:/Users/mshof/Desktop/data"
+folder_path = f"C:/Users/mshof/Desktop/npy_data"
 seq_save_path = "C:/Users/mshof/Desktop/seq_data/0505"
 
 full_seq_data = []

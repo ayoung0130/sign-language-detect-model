@@ -6,7 +6,7 @@ from PIL import ImageFont, ImageDraw, Image
 from landmark_processing import get_landmarks
 
 # 모델 불러오기
-model = load_model('models/model_pad.h5')
+model = load_model('models/model.h5')
 
 # 웹캠 설정
 cap = cv2.VideoCapture(0)
