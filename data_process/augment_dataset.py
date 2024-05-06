@@ -1,9 +1,9 @@
 import numpy as np
 import os
 
-folder_path = "C:/Users/mshof/Desktop/pad_npy_data"
-save_path = "C:/Users/mshof/Desktop/flip_pad_npy_data"
-# save_path = "C:/Users/mshof/Desktop/flip_slice_npy_data"
+folder_path = "C:/Users/mshof/Desktop/slice_npy_data"
+# save_path = "C:/Users/mshof/Desktop/flip_pad_npy_data"
+save_path = "C:/Users/mshof/Desktop/flip_slice_npy_data"
 # save_path = "C:/Users/mshof/Desktop/flip_shift_npy_data"
 
 def flip(folder_path):
@@ -13,12 +13,14 @@ def flip(folder_path):
         base_name = os.path.basename(file_path)
         data = np.load(file_path)
 
-        print("flip 전: ", data[500, :4])
+        print("flip 전: ", data[500, 248:253])
 
         # 1 - (x 좌표값)
-        data[:, 0] = 1 - data[:, 0]
+        for x in range(0, 249, 4):
+            data[:, x] = 1 - data[:, x]
+
         
-        print("flip 후: ", data[500, :4])
+        print("flip 후: ", data[500, 248:253])
         print("")
 
         # 수정된 데이터를 저장
