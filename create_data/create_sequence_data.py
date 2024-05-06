@@ -1,11 +1,11 @@
 import numpy as np
 import os, time
 
-folder_path = f"C:/Users/mshof/Desktop/npy_data"
-seq_save_path = "C:/Users/mshof/Desktop/seq_data/0505"
+folder_path = f"C:/Users/mshof/Desktop/flip_slice_npy_data"
+seq_save_path = "C:/Users/mshof/Desktop/seq_data"
 
 full_seq_data = []
-seq_length = 60
+seq_length = 30
 
 for npy_file in os.listdir(folder_path):
     # 파일 불러오기
@@ -25,5 +25,5 @@ full_seq_data = np.concatenate(full_seq_data, axis=0)
 
 created_time = int(time.time())
 
-np.save(os.path.join(seq_save_path, f'seq_{created_time}'), full_seq_data)
+np.save(os.path.join(seq_save_path, f'seq_flip_slice_{created_time}'), full_seq_data)
 print("full seq data shape:",  full_seq_data.shape)

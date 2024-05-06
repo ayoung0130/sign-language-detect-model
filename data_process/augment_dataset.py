@@ -1,9 +1,10 @@
 import numpy as np
 import os
 
-folder_path = "C:/Users/mshof/Desktop/npy_data"
-save_path = "C:/Users/mshof/Desktop/flip_npy_data"
-# save_path = "C:/Users/mshof/Desktop/shift_npy_data"
+folder_path = "C:/Users/mshof/Desktop/pad_npy_data"
+save_path = "C:/Users/mshof/Desktop/flip_pad_npy_data"
+# save_path = "C:/Users/mshof/Desktop/flip_slice_npy_data"
+# save_path = "C:/Users/mshof/Desktop/flip_shift_npy_data"
 
 def flip(folder_path):
     for npy_file in os.listdir(folder_path):

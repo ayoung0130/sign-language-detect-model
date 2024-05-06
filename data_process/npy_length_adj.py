@@ -2,10 +2,13 @@ import numpy as np
 import os
 
 folder_path = "C:/Users/mshof/Desktop/npy_data"
-save_path = "C:/Users/mshof/Desktop/pad_npy_data"
+pad_save_path = "C:/Users/mshof/Desktop/pad_npy_data"
+slice_save_path = "C:/Users/mshof/Desktop/slice_npy_data"
 
 # 각 파일의  데이터 길이 측정
 max_length = 0
+min_length = 1000000
+
 print("조정 전:")
 for npy_file in os.listdir(folder_path):
     # 파일 불러오기
@@ -17,11 +20,13 @@ for npy_file in os.listdir(folder_path):
     
     print(f"{os.path.basename(file_path)}: {length}")
     max_length = max(max_length, length)
+    min_length = min(min_length, length)
 
 print("\nmax_len:", max_length)
+print("min_len:", min_length)
+print("")
 
-
-# 모든 파일의 시퀀스 데이터를 최대 길이에 맞춰 재조정
+# 모든 파일의 시퀀스 데이터를 최대 길이에 맞춰 패딩
 for npy_file in os.listdir(folder_path):
     # 파일 불러오기
     file_path = os.path.join(folder_path, npy_file)
@@ -41,17 +46,25 @@ for npy_file in os.listdir(folder_path):
 
         data = np.concatenate([data, padding], axis=0)
     
-    np.save(os.path.join(save_path, "pad_" + base_name), data)
+    np.save(os.path.join(pad_save_path, "pad_" + base_name), data)
+    print(f"{os.path.basename(file_path)}: {len(data)}")
 
 
-# 확인용
-print("\n조정 후:")
-for npy_file in os.listdir(folder_path):
-    # 파일 불러오기
-    file_path = os.path.join(folder_path, npy_file)
+# 모든 파일의 시퀀스 데이터를 최소 길이에 맞춰 자르기
+# for npy_file in os.listdir(folder_path):
+#     # 파일 불러오기
+#     file_path = os.path.join(folder_path, npy_file)
+#     base_name = os.path.basename(file_path)
 
-    # 각 파일의 시퀀스 데이터 길이 측정
-    data = np.load(file_path)
-    length = len(data)
+#     data = np.load(file_path)
+#     length = len(data)
     
-    print(f"{os.path.basename(file_path)}: {length}")
+#     if length > min_length:
+#         slice_data = data[:min_length, :]
+
+#         # 인덱스 추출, 추가
+#         idx = data[0, -1]
+#         slice_data[:, -1] = idx
+    
+#     np.save(os.path.join(slice_save_path, "slice_" + base_name), slice_data)
+#     print(f"{os.path.basename(file_path)}: {len(slice_data)}")
