@@ -1,8 +1,8 @@
 import numpy as np
 import os, time
 
-folder_path = f"C:/Users/mshof/Desktop/pad_npy_data"
-seq_save_path = "C:/Users/mshof/Desktop/seq_data"
+folder_path = f"C:/Users/_/Desktop/flip_slice_npy_data"
+seq_save_path = "C:/Users/_/Desktop/seq_data"
 
 full_seq_data = []
 seq_length = 30
@@ -25,5 +25,5 @@ full_seq_data = np.concatenate(full_seq_data, axis=0)
 
 created_time = int(time.time())
 
-np.save(os.path.join(seq_save_path, f'seq_pad_{created_time}'), full_seq_data)
+np.save(os.path.join(seq_save_path, f'seq_flip_slice_{created_time}'), full_seq_data)
 print("full seq data shape:",  full_seq_data.shape)
