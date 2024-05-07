@@ -1,12 +1,14 @@
 import numpy as np
 import os
+folder_path = "C:/Users/_/Desktop/pad_npy_data"
+# folder_path = "C:/Users/_/Desktop/slice_npy_data"
+# folder_path = "C:/Users/mshof/Desktop/shift_npy_data"
 
-folder_path = "C:/Users/mshof/Desktop/slice_npy_data"
-# save_path = "C:/Users/mshof/Desktop/flip_pad_npy_data"
-save_path = "C:/Users/mshof/Desktop/flip_slice_npy_data"
+save_path = "C:/Users/_/Desktop/flip_pad_npy_data"
+# save_path = "C:/Users/_/Desktop/flip_slice_npy_data"
 # save_path = "C:/Users/mshof/Desktop/flip_shift_npy_data"
 
-def flip(folder_path):
+def flip():
     for npy_file in os.listdir(folder_path):
         # 파일 불러오기
         file_path = os.path.join(folder_path, npy_file)
@@ -27,7 +29,7 @@ def flip(folder_path):
         np.save(os.path.join(save_path, "flip_" + base_name), data)
 
 
-def shift(folder_path):
+def shift():
     for npy_file in os.listdir(folder_path):
         # 파일 불러오기
         file_path = os.path.join(folder_path, npy_file)
@@ -48,5 +50,5 @@ def shift(folder_path):
         np.save(os.path.join(save_path, "shift_" + base_name), data)
 
 
-flip(folder_path)
-# shift(folder_path)
+flip()
+# shift()
