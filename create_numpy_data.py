@@ -5,13 +5,12 @@ from landmark_processing import get_landmarks
 
 # 동영상 파일 설정
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
-action = "토하다"
-idx = 9
+action = "가렵다"
+idx = 0
 folder_path = f"C:/Users/mshof/Desktop/video/resized_video_{idx}"
 
 # 데이터 저장 경로
 npy_save_path = "C:/Users/mshof/Desktop/npy_data/"
-seq_save_path = "C:/Users/mshof/Desktop/seq_data_0503/"
 
 data = []
 
