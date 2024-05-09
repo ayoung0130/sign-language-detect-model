@@ -23,7 +23,7 @@ while cap.isOpened():
     if not ret:
         break
 
-    results_hands = hands.process(frame)    # 손 랜드마크 검출
+    results_hands = hands.process(frame, False)    # 손 랜드마크 검출
 
     # 랜드마크, 프레임 가져오기
     d, frame = get_landmarks(frame)

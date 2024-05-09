@@ -3,7 +3,7 @@ import cv2
 from setting import mp_hands, mp_pose, hands, pose, pose_landmark_indices, mp_drawing
 
 # Input: 동영상 파일 / Output: 좌표값, 가시성정보 numpy 배열
-def get_landmarks(frame) :
+def get_landmarks(frame, angle):
 
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results_hands = hands.process(frame)    # 손 랜드마크 검출
@@ -44,8 +44,13 @@ def get_landmarks(frame) :
         # 포즈 랜드마크 그리기
         mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
-    # 좌표값만 (총 데이터 4*21*3 = 252) []
-    return np.array(joint.flatten()), frame
+    if angle is False:
+        # 좌표값 + 가시성 (총 데이터 4*21*3 = 252)
+        return np.array(joint.flatten()), frame
+    if angle is True:
+        a = np.concatenate((angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)))
+        # 좌표값 + 가시성 + 각도 (총 데이터 4*21*3 + 45 = 297)
+        return np.concatenate((joint.flatten(), a)), frame
 
 
 def angle_hands(joint_hands):
@@ -54,8 +59,12 @@ def angle_hands(joint_hands):
     v2 = joint_hands[[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20], :3] # Child joint
     v = v2 - v1 # [20, 3]. 20개 행과 3개 열
 
+    # 정규화 전에 분모가 0인 경우에는 0으로 대체
+    norm_v = np.linalg.norm(v, axis=1)
+    v[norm_v == 0] = 0  # 분모가 0인 경우에는 해당 요소를 0으로 대체
+
     # 벡터 정규화
-    v = v / np.linalg.norm(v, axis=1)[:, np.newaxis]
+    v = v / norm_v[:, np.newaxis]
 
     # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
     angle = np.arccos(np.einsum('nt,nt->n',
@@ -75,7 +84,11 @@ def angle_pose(joint_pose):
     # 0, 1, 2, 3, 4, 5, 6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
     v = v2 - v1
 
-    v = v / np.linalg.norm(v, axis=1)[:, np.newaxis]
+    # 정규화 전에 분모가 0인 경우에는 0으로 대체
+    norm_v = np.linalg.norm(v, axis=1)
+    v[norm_v == 0] = 0  # 분모가 0인 경우에는 해당 요소를 0으로 대체
+
+    v = v / norm_v[:, np.newaxis]
 
     angle = np.arccos(np.einsum('nt,nt->n',
         v[[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],:], 
