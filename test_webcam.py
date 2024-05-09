@@ -53,10 +53,8 @@ while cap.isOpened():
         y_pred = model.predict(full_seq_data)
 
         mean_pred = np.mean(np.array(y_pred), axis=0)
-        # print("mean: ", mean_pred)
 
         max_pred = int(np.argmax(mean_pred))
-        # print("max_pred_idx: ", max_pred)
 
         conf = mean_pred[max_pred]
         print(f"conf: {conf:.3f}")

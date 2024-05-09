@@ -20,11 +20,10 @@ def flip():
         # 0번 인덱스부터 249번 인덱스까지
         # 1 - (x 좌표값)
         for x in range(0, 250, 4):
-            nonzero_indices = np.nonzero(data[:, x])[0]  # 0이 아닌 값의 인덱스를 찾습니다.
-            if len(nonzero_indices) > 0:  # 0이 아닌 값이 하나라도 있는 경우에만 연산을 수행합니다.
+            nonzero_indices = np.nonzero(data[:, x])[0]  # 0이 아닌 값의 인덱스를 찾기
+            if len(nonzero_indices) > 0:  # 0이 아닌 값이 하나라도 있는 경우에만 연산을 수행
                 data[:, x][nonzero_indices] = 1 - data[:, x][nonzero_indices]
 
-        
         print("flip 후: ", data[100, 248:253])
         print("")
 
@@ -39,14 +38,14 @@ def shift():
         base_name = os.path.basename(file_path)
         data = np.load(file_path)
 
-        print("shift 전: ", data[500, :12])
+        print("shift 전: ", data[100, 248:253])
 
         # 특정 값을 더해 이동
         # data[:, 0] += 
         # data[:, 1] += 
         # data[:, 2] += 
         
-        print("shift 후: ", data[500, :12])
+        print("shift 후: ", data[100, 248:253])
         print("")
 
         # 수정된 데이터를 저장
