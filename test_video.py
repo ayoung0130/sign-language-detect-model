@@ -8,7 +8,7 @@ from landmark_processing import get_landmarks
 model = load_model('models/model_pad.h5')
 
 # 비디오 파일 설정
-video_source = f"C:/Users/_/Desktop/video/test_video"
+video_source = f"C:/Users/mshof/Desktop/video/test_video"
 
 # 동영상 파일 목록 랜덤으로 섞기
 video_files = os.listdir(video_source)
@@ -49,10 +49,13 @@ for video_file in video_files:
 
     # 예측
     y_pred = model.predict(full_seq_data)
+    print(y_pred)
 
     mean_pred = np.mean(np.array(y_pred), axis=0)
+    print(mean_pred)
 
     max_pred = int(np.argmax(mean_pred))
+    print(max_pred)
 
     conf = mean_pred[max_pred]
 
