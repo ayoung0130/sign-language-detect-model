@@ -54,7 +54,6 @@ def get_landmarks(frame, angle):
 
 
 def angle_hands(joint_hands):
-    # 한 프레임에 대한 0번~20번 랜드마크의 좌표값 들어옴
     # 관절 간의 각도 계산
     v1 = joint_hands[[0,1,2,3,0,5,6,7,0,9,10,11,0,13,14,15,0,17,18,19], :3] # Parent joint  각 관절은 [x, y, z] 좌표로 표현되므로 :3
     v2 = joint_hands[[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20], :3] # Child joint
@@ -62,12 +61,11 @@ def angle_hands(joint_hands):
 
     # 벡터 정규화
     norm_v = np.linalg.norm(v, axis=1)
-    print(norm_v)
+
     if norm_v.all() == 0:
         angle = np.zeros([15,])
     else: 
         v = v / norm_v[:, np.newaxis]
-
         # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
         angle = np.arccos(np.einsum('nt,nt->n',
             v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
@@ -92,7 +90,6 @@ def angle_pose(joint_pose):
         angle = np.zeros([15,])
     else: 
         v = v / norm_v[:, np.newaxis]
-
         # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
         angle = np.arccos(np.einsum('nt,nt->n',
             v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
