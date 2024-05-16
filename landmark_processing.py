@@ -85,6 +85,7 @@ def angle_pose(joint_pose):
     v = v2 - v1
 
     # 벡터 정규화
+    # 런타임 경고는 없으나 nan이 아직도 발생
     norm_v = np.linalg.norm(v, axis=1)
     if norm_v.all() == 0:
         angle = np.zeros([15,])
