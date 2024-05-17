@@ -7,7 +7,7 @@ from landmark_processing import get_landmarks
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
 action = "토하다"
 idx = 9
-folder_path = f"C:/Users/mshof/Desktop/video/resized_video_{idx}"
+folder_path = f"C:/Users/mshof/Desktop/video/임시"
 
 # 데이터 저장 경로
 npy_save_path = "C:/Users/mshof/Desktop/npy_data/"
@@ -41,13 +41,13 @@ for video_file in os.listdir(folder_path):
 # 넘파이 배열로 생성
 data = np.array(data)
 print("data shape: ", action, data.shape)
-print("data\n", data[50:52])
+print("data\n", data[50:53])
 
 created_time = int(time.time())
 
 # 넘파이 데이터 저장
-np.save(os.path.join(npy_save_path, f'{action}_{created_time}'), data)
-print("npy data shape:", action, data.shape)
+# np.save(os.path.join(npy_save_path, f'{action}_{created_time}'), data)
+# print("npy data shape:", action, data.shape)
 
 # 사용된 함수, 자원 해제
 cv2.destroyAllWindows()

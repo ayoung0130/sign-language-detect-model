@@ -19,7 +19,6 @@ def get_landmarks(frame, angle):
     # 손 검출시
     if results_hands.multi_hand_landmarks is not None:
         for res, handedness in zip(results_hands.multi_hand_landmarks, results_hands.multi_handedness):
-            
             # 손 -> 모든 관절에 대해 반복. 한 프레임에 왼손, 오른손 데이터가 0번부터 20번까지 들어감
             for j, lm in enumerate(res.landmark):
                 if handedness.classification[0].label == 'Left':
@@ -28,29 +27,29 @@ def get_landmarks(frame, angle):
                     joint_right_hands[j] = [lm.x, lm.y, lm.z, set_visibility(lm.x, lm.y)]
             
             # 손 랜드마크 그리기
-            if handedness.classification[0].label == 'Left':
-                mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS, landmark_drawing_spec=mp_drawing.DrawingSpec(color=(0, 255, 0)))   # green
-            else:
-                mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS, landmark_drawing_spec=mp_drawing.DrawingSpec(color=(255, 0, 0)))   # blue
+            mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS,
+                                      landmark_drawing_spec=mp_drawing.DrawingSpec(color=(0, 255, 0)) if handedness.classification[0].label == 'Left' else mp_drawing.DrawingSpec(color=(255, 0, 0)))
 
     # 포즈 검출시
     if results_pose.pose_landmarks is not None:
-        # 전체 데이터(joint) 생성 / 포즈 -> 지정한 관절에 대해서만 반복
+        # 포즈 -> 지정한 관절에 대해서만 반복
         for j, i in enumerate(pose_landmark_indices):
             plm = results_pose.pose_landmarks.landmark[i]
-            joint[j] = np.concatenate([joint_left_hands[j], joint_right_hands[j], [plm.x, plm.y, plm.z, plm.visibility]])
             joint_pose[j] = [plm.x, plm.y, plm.z, plm.visibility]
 
         # 포즈 랜드마크 그리기
         mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+    
+    # 왼손 + 오른손 + 포즈
+    joint = np.concatenate([joint_left_hands, joint_right_hands, joint_pose])
 
     if angle is False:
-        # 좌표값 + 가시성 (총 데이터 4*21*3 = 252)
-        return np.array(joint.flatten()), frame
-    if angle is True:
-        a = np.concatenate((angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)))
-        # 좌표값 + 가시성 + 각도 (총 데이터 4*21*3 + 45 = 297)
-        return np.concatenate((joint.flatten(), a)), frame
+        # joint (총 데이터 4*21*3 = 252)
+        return joint.flatten(), frame
+    elif angle is True:
+        angles = np.concatenate((angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)))
+        # joint + 각도 (총 데이터 4*21*3 + 45 = 297)
+        return np.concatenate((joint.flatten(), angles)), frame
 
 
 def angle_hands(joint_hands):
@@ -62,7 +61,7 @@ def angle_hands(joint_hands):
     # 벡터 정규화
     norm_v = np.linalg.norm(v, axis=1)
 
-    if norm_v.all() == 0:
+    if norm_v.any() == 0:
         angle = np.zeros([15,])
     else: 
         v = v / norm_v[:, np.newaxis]
@@ -71,10 +70,7 @@ def angle_hands(joint_hands):
             v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
             v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:])) # [15,]
 
-    # 각도 정보 추가
-    angle_label = np.array([angle], dtype=np.float32)
-    
-    return angle_label.flatten()
+    return angle.flatten()
 
 
 def angle_pose(joint_pose):
@@ -87,7 +83,7 @@ def angle_pose(joint_pose):
     # 벡터 정규화
     # 런타임 경고는 없으나 nan이 아직도 발생
     norm_v = np.linalg.norm(v, axis=1)
-    if norm_v.all() == 0:
+    if norm_v.any() == 0:
         angle = np.zeros([15,])
     else: 
         v = v / norm_v[:, np.newaxis]
@@ -96,9 +92,7 @@ def angle_pose(joint_pose):
             v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
             v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:])) # [15,]
 
-    angle_label = np.array([angle], dtype=np.float32)
-
-    return angle_label.flatten()
+    return angle.flatten()
 
 
 def set_visibility(x, y, epsilon=1e-6):

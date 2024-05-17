@@ -1,11 +1,11 @@
 import numpy as np
 import os, time
+from setting import seq_length
 
 folder_path = f"C:/Users/mshof/Desktop/flip_pad_npy_data"
 seq_save_path = "C:/Users/mshof/Desktop/seq_data"
 
 full_seq_data = []
-seq_length = 30
 
 for npy_file in os.listdir(folder_path):
     # 파일 불러오기

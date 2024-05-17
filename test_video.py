@@ -59,14 +59,15 @@ for video_file in video_files:
 
     conf = mean_pred[max_pred]
 
-    action = actions[max_pred]
+    if conf > 0.5:
+        action = actions[max_pred]
 
-    print("예측결과: ", action)
-    print(f"conf: {conf:.3f}")
-    print("정답: ", base_name)
+        print("예측결과: ", action)
+        print(f"conf: {conf:.3f}")
+        print("정답: ", base_name)
 
-    if action in base_name:
-        correct_count += 1
+        if action in base_name:
+            correct_count += 1
 
 cap.release()
 cv2.destroyAllWindows()
