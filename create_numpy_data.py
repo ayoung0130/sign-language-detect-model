@@ -25,7 +25,7 @@ for video_file in os.listdir(folder_path):
             break
         
         # 랜드마크, 프레임 가져오기
-        d, frame = get_landmarks(frame, True)
+        d, frame = get_landmarks(frame, False)
 
         # 인덱스 추가
         d = np.append(d, idx)
