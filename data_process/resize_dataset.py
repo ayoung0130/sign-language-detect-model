@@ -1,5 +1,7 @@
 import cv2, os
 
+# 사용 x
+
 name = "토하다"
 
 # 파일 경로명 주의
