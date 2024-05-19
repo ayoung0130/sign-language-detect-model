@@ -2,7 +2,7 @@ import numpy as np
 import os, time
 from setting import seq_length
 
-folder_path = f"C:/Users/mshof/Desktop/flip_pad_npy_data"
+folder_path = f"C:/Users/mshof/Desktop/shift_npy"
 seq_save_path = "C:/Users/mshof/Desktop/seq_data"
 
 full_seq_data = []
@@ -25,5 +25,5 @@ full_seq_data = np.concatenate(full_seq_data, axis=0)
 
 created_time = int(time.time())
 
-np.save(os.path.join(seq_save_path, f'seq_flip_pad_{created_time}'), full_seq_data)
+np.save(os.path.join(seq_save_path, f'seq_{created_time}'), full_seq_data)
 print("full seq data shape:",  full_seq_data.shape)

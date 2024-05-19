@@ -3,9 +3,10 @@ import numpy as np
 from setting import actions
 from keras.models import load_model
 from landmark_processing import get_landmarks
+from collections import Counter
 
 # 모델 불러오기
-model = load_model('models/model_slice.h5')
+model = load_model('models/model.h5')
 
 # 비디오 파일 설정
 video_source = f"C:/Users/mshof/Desktop/video/test_video"
@@ -41,7 +42,8 @@ for video_file in video_files:
         cv2.imshow('MediaPipe', frame)
         if cv2.waitKey(1) == ord('q'):
             break
-        
+
+    cap.release()
     data = np.array(data)
 
     full_seq_data = [data[seq:seq + seq_length] for seq in range(len(data) - seq_length)]
@@ -49,19 +51,21 @@ for video_file in video_files:
 
     # 예측
     y_pred = model.predict(full_seq_data)
-    print(y_pred)
 
-    mean_pred = np.mean(np.array(y_pred), axis=0)
-    print(mean_pred)
+    # 각 프레임의 가장 높은 확률을 가지는 클래스 선택
+    predicted_classes = np.argmax(y_pred, axis=1)
 
-    max_pred = int(np.argmax(mean_pred))
-    print(max_pred)
+    # 다수결 투표 방식으로 최종 예측 결정
+    vote_counts = Counter(predicted_classes)
+    final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
 
-    conf = mean_pred[max_pred]
+    # 신뢰도 계산
+    total_votes = len(predicted_classes)
+    conf = final_prediction_count / total_votes
+
+    action = actions[final_prediction]
 
     if conf > 0.5:
-        action = actions[max_pred]
-
         print("예측결과: ", action)
         print(f"conf: {conf:.3f}")
         print("정답: ", base_name)
@@ -69,7 +73,9 @@ for video_file in video_files:
         if action in base_name:
             correct_count += 1
 
-cap.release()
+    save_path = f"C:/Users/mshof/Desktop/pred/{base_name}_{action}.npy"
+    np.save(save_path, y_pred)
+
 cv2.destroyAllWindows()
 
 print("\n정답 수:", correct_count)
