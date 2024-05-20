@@ -7,7 +7,7 @@ from landmark_processing import get_landmarks
 from setting import hands
 
 # 모델 불러오기
-model = load_model('models/model_slice.h5')
+model = load_model('models/model.h5')
 
 # 웹캠 설정
 cap = cv2.VideoCapture(0)
@@ -23,10 +23,10 @@ while cap.isOpened():
     if not ret:
         break
 
-    results_hands = hands.process(frame, False)    # 손 랜드마크 검출
+    results_hands = hands.process(frame)    # 손 랜드마크 검출
 
     # 랜드마크, 프레임 가져오기
-    d, frame = get_landmarks(frame)
+    d, frame = get_landmarks(frame, False)
 
     # 글자 표시
     img_pil = Image.fromarray(frame)

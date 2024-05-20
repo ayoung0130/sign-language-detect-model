@@ -1,8 +1,8 @@
 import numpy as np
 import os
-folder_path = "C:/Users/mshof/Desktop/npy_data"
+folder_path = "C:/Users/mshof/Desktop/shift_3_npy"
 
-save_path = "C:/Users/mshof/Desktop/shift_npy"
+save_path = "C:/Users/mshof/Desktop/s_3_f_npy"
 
 def flip():
     for npy_file in os.listdir(folder_path):
@@ -39,19 +39,19 @@ def shift():    # +- 20% 이동
         # 0번 인덱스부터 249번 인덱스까지
         # (x 좌표값) * (이동시킬 퍼센테이지)
         for x in range(0, 250, 4):
-            data[:, x] = data[:, x] * 0.8
+            data[:, x] = data[:, x] * 1.1
         
         # 1번 인덱스부터 250번 인덱스까지
         # (y 좌표값) * (이동시킬 퍼센테이지)
         for y in range(1, 251, 4):
-            data[:, y] = data[:, y] * 0.8
+            data[:, y] = data[:, y] * 1.1
 
         print("shift 후: ", data[120, 248:253])
         print("")
 
         # 수정된 데이터를 저장
-        np.save(os.path.join(save_path, "shift_0.8_" + base_name), data)
+        np.save(os.path.join(save_path, "shift_1.1_" + base_name), data)
 
 
-# flip()
-shift()
+flip()
+# shift()

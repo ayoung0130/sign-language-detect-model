@@ -2,7 +2,7 @@ import numpy as np
 import os, time
 from setting import seq_length
 
-folder_path = f"C:/Users/mshof/Desktop/shift_npy"
+folder_path = f"C:/Users/mshof/Desktop/s_4_f_npy"
 seq_save_path = "C:/Users/mshof/Desktop/seq_data"
 
 full_seq_data = []
