@@ -9,7 +9,7 @@ from collections import Counter
 model = load_model('models/model.h5')
 
 # 비디오 파일 설정
-video_source = f"C:/Users/mshof/Desktop/video/test_video"
+video_source = f"C:/Users/_/Desktop/video/test_video"
 
 # 동영상 파일 목록 랜덤으로 섞기
 video_files = os.listdir(video_source)
@@ -70,10 +70,10 @@ for video_file in video_files:
         print(f"conf: {conf:.3f}")
         print("정답: ", base_name)
 
-        if action in base_name:
-            correct_count += 1
+    if action in base_name:
+        correct_count += 1
 
-    save_path = f"C:/Users/mshof/Desktop/pred/{base_name}_{action}.npy"
+    save_path = f"C:/Users/_/Desktop/pred/{base_name}_{action}.npy"
     np.save(save_path, y_pred)
 
 cv2.destroyAllWindows()

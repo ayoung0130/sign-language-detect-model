@@ -5,6 +5,7 @@ from keras.models import load_model
 from PIL import ImageDraw, Image
 from landmark_processing import get_landmarks
 from setting import hands
+from collections import Counter
 
 # 모델 불러오기
 model = load_model('models/model.h5')
@@ -52,19 +53,25 @@ while cap.isOpened():
         # 예측
         y_pred = model.predict(full_seq_data)
 
-        mean_pred = np.mean(np.array(y_pred), axis=0)
+        # 각 프레임의 가장 높은 확률을 가지는 클래스 선택
+        predicted_classes = np.argmax(y_pred, axis=1)
 
-        max_pred = int(np.argmax(mean_pred))
+        # 다수결 투표 방식으로 최종 예측 결정
+        vote_counts = Counter(predicted_classes)
+        final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
 
-        conf = mean_pred[max_pred]
+        # 신뢰도 계산
+        total_votes = len(predicted_classes)
+        conf = final_prediction_count / total_votes
         print(f"conf: {conf:.3f}")
 
+        action = actions[final_prediction]
+
         if conf > 0.5:
-            action = actions[max_pred]
             print("예측결과: ", action)
         else:
             action = "정확도가 낮습니다. 동작을 다시 시작하세요"
-            print("예측결과: ", actions[max_pred])
+            print("예측결과: ", action)
             print("정확도가 낮습니다")
             
         data = []

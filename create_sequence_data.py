@@ -2,10 +2,11 @@ import numpy as np
 import os, time
 from setting import seq_length
 
-folder_path = f"C:/Users/mshof/Desktop/s_4_f_npy"
-seq_save_path = "C:/Users/mshof/Desktop/seq_data"
+folder_path = f"C:/Users/_/Desktop/s_4_f_npy"
+seq_save_path = "C:/Users/_/Desktop/seq_data"
 
 full_seq_data = []
+count = 0
 
 for npy_file in os.listdir(folder_path):
     # 파일 불러오기
@@ -19,6 +20,7 @@ for npy_file in os.listdir(folder_path):
 
     # 시퀀스 데이터를 full_seq_data에 추가
     full_seq_data.append(data)
+    count += 1
 
 # full_seq_data 리스트에 있는 모든 시퀀스 데이터를 concatenate하여 하나의 배열로 만듦
 full_seq_data = np.concatenate(full_seq_data, axis=0)
@@ -27,3 +29,4 @@ created_time = int(time.time())
 
 np.save(os.path.join(seq_save_path, f'seq_{created_time}'), full_seq_data)
 print("full seq data shape:",  full_seq_data.shape)
+print(f"npy 파일 개수: {count}개")
