@@ -6,7 +6,7 @@ from landmark_processing import get_landmarks
 
 # 동영상 파일 설정
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
-idx = 9
+idx = 0
 action = actions[idx]
 folder_path = f"C:/Users/mshof/Desktop/video/resized_video_{idx}"
 
