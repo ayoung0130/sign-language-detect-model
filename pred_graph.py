@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from setting import actions
 
-idx = 6
+idx = 1
 action = actions[idx]
 
 # 불러올 파일 경로 설정
