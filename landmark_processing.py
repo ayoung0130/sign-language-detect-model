@@ -14,7 +14,6 @@ def get_landmarks(frame, angle):
     joint_left_hands = np.zeros((21, 4))
     joint_right_hands = np.zeros((21, 4))
     joint_pose = np.zeros((21, 4))
-    joint = np.zeros((21, 12))
 
     # 손 검출시
     if results_hands.multi_hand_landmarks is not None:
@@ -61,14 +60,15 @@ def angle_hands(joint_hands):
     # 벡터 정규화
     norm_v = np.linalg.norm(v, axis=1)
 
-    if norm_v.any() == 0:
+    if np.all(norm_v == 0):
         angle = np.zeros([15,])
     else: 
         v = v / norm_v[:, np.newaxis]
         # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
-        angle = np.arccos(np.einsum('nt,nt->n',
+        dot_product = np.clip(np.einsum('nt,nt->n',
             v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
-            v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:])) # [15,]
+            v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:]), -1.0, 1.0)
+        angle = np.arccos(dot_product) # [15,]
 
     return angle.flatten()
 
@@ -81,16 +81,16 @@ def angle_pose(joint_pose):
     v = v2 - v1
 
     # 벡터 정규화
-    # 런타임 경고는 없으나 nan이 아직도 발생
     norm_v = np.linalg.norm(v, axis=1)
-    if norm_v.any() == 0:
+    if np.all(norm_v == 0):
         angle = np.zeros([15,])
     else: 
         v = v / norm_v[:, np.newaxis]
         # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
-        angle = np.arccos(np.einsum('nt,nt->n',
+        dot_product = np.clip(np.einsum('nt,nt->n',
             v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
-            v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:])) # [15,]
+            v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:]), -1.0, 1.0)
+        angle = np.arccos(dot_product) # [15,]
 
     return angle.flatten()
 
@@ -101,12 +101,9 @@ def set_visibility(x, y, epsilon=1e-6):
     if x <= epsilon and y <= epsilon:
         return 0
     
-    # 한 좌표가 0
-    elif x > epsilon and y <= epsilon:
-        return 0.5
-    elif x <= epsilon and y > epsilon:
+    # 한 좌표가 0인 경우
+    if x <= epsilon or y <= epsilon:
         return 0.5
     
     # 전부 0이 아닌 경우
-    else:
-        return 1
+    return 1
