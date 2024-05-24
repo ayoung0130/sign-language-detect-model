@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from setting import actions
 
+# To-do: 그래프를 더 의미있는 자료로 나타낼 방안 논의 (한 프레임당의 정확도는 중요x?)
+
 idx = 1
 action = actions[idx]
 
