@@ -11,7 +11,7 @@ action = actions[idx]
 file_paths = [
     f'C:/Users/mshof/Desktop/pred/1_{action}.mp4_부러지다.npy'
 ]
-
+[]
 # 0번 인덱스에 해당하는 값을 저장할 리스트
 itch_data = []
 
