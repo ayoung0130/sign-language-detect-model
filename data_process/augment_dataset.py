@@ -1,8 +1,8 @@
 import numpy as np
 import os
-folder_path = "C:/Users/mshof/Desktop/npy_data"
+folder_path = "C:/Users/mshof/Desktop/npy__angle_data"
 
-save_path = "C:/Users/mshof/Desktop/flip_npy"
+save_path = "C:/Users/mshof/Desktop/flip_angle"
 
 def flip():
     for npy_file in os.listdir(folder_path):
@@ -11,7 +11,7 @@ def flip():
         base_name = os.path.basename(file_path)
         data = np.load(file_path)
 
-        print("flip 전: ", data[100, 248:298])
+        print("flip 전: ", data[100, 231:250])
 
         # 0번 인덱스부터 249번 인덱스까지
         # 1 - (x 좌표값)
@@ -20,7 +20,7 @@ def flip():
             if len(nonzero_indices) > 0:  # 0이 아닌 값이 하나라도 있는 경우에만 연산을 수행
                 data[:, x][nonzero_indices] = 1 - data[:, x][nonzero_indices]
 
-        print("flip 후: ", data[100, 248:298])
+        print("flip 후: ", data[100, 231:250])
         print("")
 
         # 수정된 데이터를 저장
