@@ -1,8 +1,8 @@
 import numpy as np
 import os
-folder_path = "C:/Users/mshof/Desktop/npy__angle_data"
+folder_path = "C:/Users/mshof/Desktop/npy_angle_data"
 
-save_path = "C:/Users/mshof/Desktop/flip_angle"
+save_path = "C:/Users/mshof/Desktop/s_angle_1"
 
 def flip():
     for npy_file in os.listdir(folder_path):
@@ -53,5 +53,5 @@ def shift():    # +- 20% 이동
         np.save(os.path.join(save_path, "shift_1.1_" + base_name), data)
 
 
-flip()
-# shift()
+# flip()
+shift()
