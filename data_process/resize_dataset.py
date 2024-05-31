@@ -1,7 +1,5 @@
 import cv2, os
 
-# 사용 x
-
 name = "토하다"
 
 # 파일 경로명 주의
@@ -17,7 +15,7 @@ video_files = [f"C:/Users/_/Desktop/video/ID_1/{name}(정).avi", f"C:/Users/_/De
                f"C:/Users/_/Desktop/video/ID_10/{name}(정).avi", f"C:/Users/_/Desktop/video/ID_10/{name}(측).avi",]
 
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
-output_folder = "C:/Users/_/Desktop/video/resized_video_9"
+output_folder = "C:/Users/_/Desktop/resized_video/resized_video_0"
 os.makedirs(output_folder, exist_ok=True)
 
 # 너비, 높이 설정
