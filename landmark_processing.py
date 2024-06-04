@@ -2,7 +2,10 @@ import numpy as np
 import cv2
 from setting import mp_hands, mp_pose, hands, pose, pose_landmark_indices, mp_drawing
 
+# 미디어파이프 hands, pose 모델의 랜드마크를 처리하는 코드
+# 랜드마크 추출, 각도값 계산
 # Input: 동영상 파일 / Output: 좌표값, 가시성정보 numpy 배열
+
 def get_landmarks(frame, angle):
 
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)

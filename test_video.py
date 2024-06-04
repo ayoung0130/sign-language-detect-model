@@ -5,6 +5,8 @@ from keras.models import load_model
 from landmark_processing import get_landmarks
 from collections import Counter
 
+# 촬영한 비디오로 모델 예측을 수행하는 코드
+
 # 모델 불러오기
 model = load_model('models/model.h5')
 

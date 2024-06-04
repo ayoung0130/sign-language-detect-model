@@ -1,6 +1,8 @@
 import mediapipe as mp
 from PIL import ImageFont
 
+# 모델 초기화, 유틸 선언, 단어 리스트, 시퀀스 길이, 폰트 등을 세팅하는 코드
+
 # 미디어 파이프 hands 모델 초기화
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(max_num_hands=2, min_detection_confidence=0.5, min_tracking_confidence=0.5)

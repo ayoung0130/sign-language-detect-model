@@ -7,6 +7,8 @@ from landmark_processing import get_landmarks
 from setting import hands
 from collections import Counter
 
+# 웹캠으로 모델 예측을 수행하는 코드
+
 # 모델 불러오기
 model = load_model('models/model.h5')
 

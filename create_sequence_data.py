@@ -2,8 +2,10 @@ import numpy as np
 import os, time
 from setting import seq_length
 
-folder_path = f"C:/Users/_/Desktop/s_4_f_npy"
-seq_save_path = "C:/Users/_/Desktop/seq_data"
+# 넘파이 배열을 concatenate 후 시퀀스 배열로 변환하는 코드
+
+folder_path = f"C:/Users/mshof/Desktop/s_4_f_npy"
+seq_save_path = "C:/Users/mshof/Desktop/seq_data"
 
 full_seq_data = []
 count = 0

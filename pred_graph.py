@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from setting import actions
 
+# 모델이 예측 수행한 정확도를 그래프로 가시화하는 코드
+# 그 외 데이터도 그래프로 표현 가능
+
 # To-do: 그래프를 더 의미있는 자료로 나타낼 방안 논의 (한 프레임당의 정확도는 중요x?)
 
 idx = 1

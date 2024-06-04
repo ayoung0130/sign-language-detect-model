@@ -1,5 +1,9 @@
 import numpy as np
 import os
+
+# 데이터를 증강하는 코드
+# 6/4 - flip, shift
+
 folder_path = "C:/Users/mshof/Desktop/npy_angle_data"
 
 save_path = "C:/Users/mshof/Desktop/s_angle_1"
