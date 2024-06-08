@@ -13,11 +13,15 @@ action = actions[idx]
 folder_path = f"C:/Users/mshof/Desktop/video/resized_video_{idx}"
 
 # 데이터 저장 경로
-npy_save_path = "C:/Users/mshof/Desktop/npy_data_angle/"
+train_save_path = "C:/Users/mshof/Desktop/npy_angle_train"
+val_save_path = "C:/Users/mshof/Desktop/npy_angle_val"
+test_save_path = "C:/Users/mshof/Desktop/npy_angle_test"
 
 data = []
+video_num = 0
 
 for video_file in os.listdir(folder_path):
+    video_num += 1
     # 동영상 불러오기
     video_path = os.path.join(folder_path, video_file)
     cap = cv2.VideoCapture(video_path)
@@ -41,16 +45,32 @@ for video_file in os.listdir(folder_path):
         if cv2.waitKey(1) == ord('q'):
             break
 
-# 넘파이 배열로 생성
+    if video_num == 12:
+        # 넘파이 배열로 생성(train)
+        data = np.array(data)
+        print("train data shape: ", action, data.shape)
+
+        # 넘파이 데이터 저장(train)
+        np.save(os.path.join(train_save_path, f'{action}_train'), data)
+
+        data = []
+
+    if video_num == 16:
+        # 넘파이 배열로 생성(validation)
+        data = np.array(data)
+        print("val data shape: ", action, data.shape)
+
+        # 넘파이 데이터 저장(validation)
+        np.save(os.path.join(val_save_path, f'{action}_val'), data)
+
+        data = []
+
+# 넘파이 배열로 생성(test)
 data = np.array(data)
-print("data shape: ", action, data.shape)
-print("data\n", data[50:53])
+print("test data shape: ", action, data.shape)
 
-created_time = int(time.time())
-
-# 넘파이 데이터 저장
-np.save(os.path.join(npy_save_path, f'{action}_{created_time}'), data)
-print("npy data shape:", action, data.shape)
+# 넘파이 데이터 저장(test)
+np.save(os.path.join(test_save_path, f'{action}_test'), data)
 
 # 사용된 함수, 자원 해제
 cv2.destroyAllWindows()
