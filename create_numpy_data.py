@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import os, time
+import os, time, random
 from setting import actions
 from landmark_processing import get_landmarks
 
@@ -8,7 +8,7 @@ from landmark_processing import get_landmarks
 
 # 동영상 파일 설정
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
-idx = 9
+idx = 0
 action = actions[idx]
 folder_path = f"C:/Users/mshof/Desktop/video/resized_video_{idx}"
 
@@ -17,10 +17,13 @@ train_save_path = "C:/Users/mshof/Desktop/npy_angle_train"
 val_save_path = "C:/Users/mshof/Desktop/npy_angle_val"
 test_save_path = "C:/Users/mshof/Desktop/npy_angle_test"
 
+video_files = os.listdir(folder_path)
+random.shuffle(video_files)
+
 data = []
 video_num = 0
 
-for video_file in os.listdir(folder_path):
+for video_file in video_files:
     video_num += 1
     # 동영상 불러오기
     video_path = os.path.join(folder_path, video_file)
