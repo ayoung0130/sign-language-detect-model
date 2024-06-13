@@ -49,7 +49,7 @@ for video_file in video_files:
     cap.release()
     data = np.array(data)
 
-    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, seq_length)]
+    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
     full_seq_data = np.array(full_seq_data)
     print(full_seq_data.shape)
 
@@ -70,18 +70,27 @@ for video_file in video_files:
 
     action = actions[final_prediction]
 
-    if conf >= 0.5:
-        print("예측결과: ", action)
-        print(f"conf: {conf:.3f}")
-        print("정답: ", base_name)
-        if action in base_name:
-            correct_count += 1
-            if "3" in base_name:
-                flip_correct_count += 1
-    else:
-        print("신뢰도가 낮습니다: ", action)
-        print(f"conf: {conf:.3f}")
-        print("정답: ", base_name)
+    # 정답 출력/개수 계산
+    print("예측결과: ", action)
+    print("정답: ", base_name)
+    if action in base_name:
+        correct_count += 1
+        if "3" in base_name:
+            flip_correct_count += 1
+
+    # # 신뢰도 0.5 이상일 때만 정답으로 계산
+    # if conf >= 0.5:
+    #     print("예측결과: ", action)
+    #     print(f"conf: {conf:.3f}")
+    #     print("정답: ", base_name)
+    #     if action in base_name:
+    #         correct_count += 1
+    #         if "3" in base_name:
+    #             flip_correct_count += 1
+    # else:
+    #     print("신뢰도가 낮습니다: ", action)
+    #     print(f"conf: {conf:.3f}")
+    #     print("정답: ", base_name)
 
     ## 예측값을 넘파이 파일로 저장
     # save_path = f"C:/Users/mshof/Desktop/pred/{base_name}_{action}.npy"

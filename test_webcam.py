@@ -10,7 +10,7 @@ from collections import Counter
 # 웹캠으로 모델 예측을 수행하는 코드
 
 # 모델 불러오기
-model = load_model('models/.h5')
+model = load_model('models/model.h5')
 
 # 웹캠 설정
 cap = cv2.VideoCapture(0)
@@ -29,7 +29,7 @@ while cap.isOpened():
     results_hands = hands.process(frame)    # 손 랜드마크 검출
 
     # 랜드마크, 프레임 가져오기
-    d, frame = get_landmarks(frame, False)
+    d, frame = get_landmarks(frame, True)
 
     # 글자 표시
     img_pil = Image.fromarray(frame)
@@ -49,7 +49,7 @@ while cap.isOpened():
     elif results_hands.multi_hand_landmarks is None and len(data) > seq_length:
         data = np.array(data)
 
-        full_seq_data = [data[seq:seq + seq_length] for seq in range(len(data) - seq_length)]
+        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, seq_length)]
         full_seq_data = np.array(full_seq_data)
 
         # 예측
@@ -69,7 +69,7 @@ while cap.isOpened():
 
         action = actions[final_prediction]
 
-        if conf > 0.5:
+        if conf >= 0.5:
             print("예측결과: ", action)
         else:
             action = "정확도가 낮습니다. 동작을 다시 시작하세요"

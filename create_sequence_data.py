@@ -5,7 +5,7 @@ from setting import seq_length
 # 넘파이 파일을 concatenate 후 시퀀스 배열로 변환하는 코드
 
 folder_path = f"C:/Users/mshof/Desktop/shift"
-seq_save_path = "C:/Users/mshof/Desktop/seq_data"
+seq_save_path = "C:/Users/mshof/Desktop/seq_angle_data"
 
 full_seq_data = []
 count = 0
@@ -16,7 +16,7 @@ for npy_file in os.listdir(folder_path):
     data = np.load(file_path)
 
     # 시퀀스 데이터 생성
-    data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, seq_length)]
+    data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
     data = np.array(data)
     print(f"{os.path.basename(file_path)} seq data shape:", data.shape)
 

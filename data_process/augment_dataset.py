@@ -4,9 +4,9 @@ import os
 # 데이터를 증강하는 코드
 # 6/4 - flip, shift
 
-folder_path = "C:/Users/mshof/Desktop/shift"
+folder_path = "C:/Users/mshof/Desktop/angle"
 
-save_path = "C:/Users/mshof/Desktop/shift_flip"
+save_path = "C:/Users/mshof/Desktop/shift"
 
 def augment_data():
     for npy_file in os.listdir(folder_path):
@@ -34,23 +34,23 @@ def augment_data():
         #
         ### shift
         #
-        # print("shift 전: ", data[120, 248:253])
+        print("shift 전: ", data[120, 248:253])
 
-        # # 0번 인덱스부터 249번 인덱스까지
-        # # (x 좌표값) * (이동시킬 퍼센테이지)
-        # for x in range(0, 250, 4):
-        #     data[:, x] = data[:, x] * 1.5
+        # 0번 인덱스부터 249번 인덱스까지
+        # (x 좌표값) * (이동시킬 퍼센테이지)
+        for x in range(0, 250, 4):
+            data[:, x] = data[:, x] * 1.1
         
-        # # 1번 인덱스부터 250번 인덱스까지
-        # # (y 좌표값) * (이동시킬 퍼센테이지)
-        # for y in range(1, 251, 4):
-        #     data[:, y] = data[:, y] * 1.5
+        # 1번 인덱스부터 250번 인덱스까지
+        # (y 좌표값) * (이동시킬 퍼센테이지)
+        for y in range(1, 251, 4):
+            data[:, y] = data[:, y] * 1.1
 
-        # print("shift 후: ", data[120, 248:253])
-        # print("")
+        print("shift 후: ", data[120, 248:253])
+        print("")
 
 
         # 수정된 데이터를 저장
-        np.save(os.path.join(save_path, "flip_" + base_name), data)
+        np.save(os.path.join(save_path, "1.1_" + base_name), data)
 
 augment_data()
