@@ -16,6 +16,7 @@ for npy_file in os.listdir(folder_path):
     data = np.load(file_path)
 
     # 시퀀스 데이터 생성
+    # 시퀀스 단위 수정
     data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
     data = np.array(data)
     print(f"{os.path.basename(file_path)} seq data shape:", data.shape)
