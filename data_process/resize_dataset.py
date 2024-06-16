@@ -1,21 +1,22 @@
 import cv2, os
-from config import base_dir
 
 # 수어 데이터셋 영상 크기와 비율을 조정하는 코드
 
 name = "토하다"
 
-# 파일 경로명 주의 os.path.join(base_dir, 'angle')
-video_files = [os.path.join(base_dir, f"video/ID_1/{name}(정).avi"), os.path.join(base_dir, f"video/ID_1/{name}(측).avi"),
-               os.path.join(base_dir, f"video/ID_2/{name}(정).avi"), os.path.join(base_dir, f"video/ID_2/{name}(측).avi"),
-               os.path.join(base_dir, f"video/ID_3/{name}(정).avi"), os.path.join(base_dir, f"video/ID_3/{name}(측).avi"),
-               os.path.join(base_dir, f"video/ID_4/{name}(정).avi"), os.path.join(base_dir, f"video/ID_4/{name}(측).avi"),
-               os.path.join(base_dir, f"video/ID_5/{name}(정).avi"), os.path.join(base_dir, f"video/ID_5/{name}(측).avi"),
-               os.path.join(base_dir, f"video/ID_6/{name}(정).avi"), os.path.join(base_dir, f"video/ID_6/{name}(측).avi"),
-               os.path.join(base_dir, f"video/ID_7/{name}(정).avi"), os.path.join(base_dir, f"video/ID_7/{name}(측).avi"),
-               os.path.join(base_dir, f"video/ID_8/{name}(정).avi"), os.path.join(base_dir, f"video/ID_8/{name}(측).avi"),
-               os.path.join(base_dir, f"video/ID_9/{name}(정).avi"), os.path.join(base_dir, f"video/ID_9/{name}(측).avi"),
-               os.path.join(base_dir, f"video/ID_10/{name}(정).avi"), os.path.join(base_dir, f"video/ID_10/{name}(측).avi"), ]
+base_dir = os.environ.get('DESKTOP_DIR', os.path.join(os.path.expanduser('~'), 'Desktop'))
+
+# 파일 경로
+video_files = [os.path.join(base_dir, f"origival_video/ID_1/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_1/{name}(측).avi"),
+               os.path.join(base_dir, f"origival_video/ID_2/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_2/{name}(측).avi"),
+               os.path.join(base_dir, f"origival_video/ID_3/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_3/{name}(측).avi"),
+               os.path.join(base_dir, f"origival_video/ID_4/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_4/{name}(측).avi"),
+               os.path.join(base_dir, f"origival_video/ID_5/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_5/{name}(측).avi"),
+               os.path.join(base_dir, f"origival_video/ID_6/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_6/{name}(측).avi"),
+               os.path.join(base_dir, f"origival_video/ID_7/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_7/{name}(측).avi"),
+               os.path.join(base_dir, f"origival_video/ID_8/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_8/{name}(측).avi"),
+               os.path.join(base_dir, f"origival_video/ID_9/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_9/{name}(측).avi"),
+               os.path.join(base_dir, f"origival_video/ID_10/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_10/{name}(측).avi"), ]
 
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
 output_folder = os.path.join(base_dir, "resized_video/resized_video_0"),

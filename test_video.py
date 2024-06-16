@@ -9,10 +9,10 @@ from config import base_dir
 # 촬영한 비디오로 모델 예측을 수행하는 코드
 
 # 모델 불러오기
-model = load_model('models/model.h5')
+model = load_model('models/model_1103.h5')
 
 # 비디오 파일 설정
-video_source = os.path.join(base_dir, 'video/test_video')
+video_source = os.path.join(base_dir, 'test_video')
 
 # 동영상 파일 목록 랜덤으로 섞기
 video_files = os.listdir(video_source)
@@ -22,6 +22,9 @@ flip_video_file_count = len([file for file in video_files if "3" in file])
 
 correct_count = 0
 flip_correct_count = 0
+
+# 각 action별 정답 수를 저장할 딕셔너리 초기화
+action_correct_counts = {action: 0 for action in actions}
 
 for video_file in video_files:
     # 동영상 불러오기
@@ -72,6 +75,7 @@ for video_file in video_files:
     print("정답: ", base_name)
     if action in base_name:
         correct_count += 1
+        action_correct_counts[action] += 1
         if "3" in base_name:
             flip_correct_count += 1
 
@@ -81,7 +85,16 @@ for video_file in video_files:
 
 cv2.destroyAllWindows()
 
-print("\n정답 수:", correct_count, "/", video_file_count)
+print("")
+print("결과")
+
+# 각 action별 정답 확률 출력
+for action, correct in action_correct_counts.items():
+    accuracy = (correct / 4 * 100)
+    print(f"{action} --> {accuracy:.2f}% ({correct}/4)")
+
+# 총 정답 개수
+print("\n총 정답 수:", correct_count, "/", video_file_count)
 
 # flip 영상이 있다면
 if flip_video_file_count > 0:

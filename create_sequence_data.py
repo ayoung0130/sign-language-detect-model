@@ -5,7 +5,7 @@ from config import base_dir
 
 # 넘파이 파일을 concatenate 후 시퀀스 배열로 변환하는 코드
 
-folder_path = os.path.join(base_dir, "angle_flip")
+folder_path = os.path.join(base_dir, "shift_flip")
 seq_save_path = os.path.join(base_dir, "seq_angle_data")
 
 full_seq_data = []
