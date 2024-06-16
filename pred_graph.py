@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 from setting import actions
+from config import base_dir
 
 # 모델이 예측 수행한 정확도를 그래프로 가시화하는 코드
 # 그 외 데이터도 그래프로 표현 가능
@@ -11,10 +13,8 @@ idx = 1
 action = actions[idx]
 
 # 불러올 파일 경로 설정
-file_paths = [
-    f'C:/Users/mshof/Desktop/pred/1_{action}.mp4_부러지다.npy'
-]
-[]
+file_paths = [os.path.join(base_dir, f"pred/1_{action}.mp4_부러지다.npy")]
+
 # 0번 인덱스에 해당하는 값을 저장할 리스트
 itch_data = []
 

@@ -4,6 +4,7 @@ from setting import actions, seq_length
 from keras.models import load_model
 from landmark_processing import get_landmarks
 from collections import Counter
+from config import base_dir
 
 # 촬영한 비디오로 모델 예측을 수행하는 코드
 
@@ -11,7 +12,7 @@ from collections import Counter
 model = load_model('models/model.h5')
 
 # 비디오 파일 설정
-video_source = f"C:/Users/mshof/Desktop/video/test_video"
+video_source = os.path.join(base_dir, 'video/test_video')
 
 # 동영상 파일 목록 랜덤으로 섞기
 video_files = os.listdir(video_source)
@@ -64,10 +65,6 @@ for video_file in video_files:
     vote_counts = Counter(predicted_classes)
     final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
 
-    # 신뢰도 계산
-    total_votes = len(predicted_classes)
-    conf = final_prediction_count / total_votes
-
     action = actions[final_prediction]
 
     # 정답 출력/개수 계산
@@ -78,22 +75,8 @@ for video_file in video_files:
         if "3" in base_name:
             flip_correct_count += 1
 
-    # # 신뢰도 0.5 이상일 때만 정답으로 계산
-    # if conf >= 0.5:
-    #     print("예측결과: ", action)
-    #     print(f"conf: {conf:.3f}")
-    #     print("정답: ", base_name)
-    #     if action in base_name:
-    #         correct_count += 1
-    #         if "3" in base_name:
-    #             flip_correct_count += 1
-    # else:
-    #     print("신뢰도가 낮습니다: ", action)
-    #     print(f"conf: {conf:.3f}")
-    #     print("정답: ", base_name)
-
-    ## 예측값을 넘파이 파일로 저장
-    # save_path = f"C:/Users/mshof/Desktop/pred/{base_name}_{action}.npy"
+    # # 예측값을 넘파이 파일로 저장
+    # save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
     # np.save(save_path, y_pred)
 
 cv2.destroyAllWindows()

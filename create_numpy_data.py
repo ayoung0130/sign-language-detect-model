@@ -3,6 +3,7 @@ import numpy as np
 import os, time
 from setting import actions
 from landmark_processing import get_landmarks
+from config import base_dir
 
 # 영상을 넘파이 배열로 변환하는 코드
 
@@ -10,10 +11,10 @@ from landmark_processing import get_landmarks
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)
 idx = 0
 action = actions[idx]
-folder_path = f"C:/Users/mshof/Desktop/video/resized_video_{idx}"
+folder_path = os.path.join(base_dir, f"video/resized_video_{idx}")
 
 # 데이터 저장 경로
-save_path = "C:/Users/mshof/Desktop/angle"
+save_path = os.path.join(base_dir, "angle")
 
 data = []
 video_num = 0
