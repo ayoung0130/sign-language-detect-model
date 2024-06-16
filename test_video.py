@@ -9,7 +9,7 @@ from config import base_dir
 # 촬영한 비디오로 모델 예측을 수행하는 코드
 
 # 모델 불러오기
-model = load_model('models/model_1103.h5')
+model = load_model('models/model_0616.h5')
 
 # 비디오 파일 설정
 video_source = os.path.join(base_dir, 'test_video')
@@ -60,8 +60,16 @@ for video_file in video_files:
     # 예측
     y_pred = model.predict(full_seq_data)
 
-    # 각 프레임의 가장 높은 확률을 가지는 클래스 선택
-    predicted_classes = np.argmax(y_pred, axis=1)
+    # 각 프레임의 가장 높은 확률을 가지는 클래스 선택 (90% 이상일 때만)
+    predicted_classes = []
+    for frame_predictions in y_pred:
+        max_prob = np.max(frame_predictions)
+        if max_prob >= 0.9:
+            predicted_class = np.argmax(frame_predictions)
+            predicted_classes.append(predicted_class)
+        else:
+            predicted_classes.append(None)  # 50% 이상의 확률을 가지는 클래스가 없는 경우 None 추가
+
     print(predicted_classes)
 
     # 다수결 투표 방식으로 최종 예측 결정
