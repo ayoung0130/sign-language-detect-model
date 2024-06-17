@@ -63,15 +63,13 @@ for video_file in video_files:
     # 예측
     y_pred = model.predict(full_seq_data)
 
-    # 각 프레임의 가장 높은 확률을 가지는 클래스 선택 (90% 이상일 때만)
+    # 각 프레임의 가장 높은 확률을 가지는 클래스 선택 (95% 이상일 때만)
     predicted_classes = []
     for frame_predictions in y_pred:
         max_prob = np.max(frame_predictions)
-        if max_prob >= 0.9:
+        if max_prob >= 0.95:
             predicted_class = np.argmax(frame_predictions)
             predicted_classes.append(predicted_class)
-        else:
-            predicted_classes.append(None)  # 50% 이상의 확률을 가지는 클래스가 없는 경우 None 추가
 
     print(predicted_classes)
 
