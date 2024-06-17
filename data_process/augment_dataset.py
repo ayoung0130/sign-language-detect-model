@@ -1,10 +1,13 @@
 import numpy as np
 import os
+from dotenv import load_dotenv
 
 # 데이터를 증강하는 코드
-# 6/16 - shift
-base_dir = os.environ.get('DESKTOP_DIR', os.path.join(os.path.expanduser('~'), 'Desktop'))
 
+load_dotenv()
+base_dir = os.getenv('BASE_DIR')
+
+# 6/16 - shift
 folder_path = os.path.join(base_dir, 'angle_flip')
 
 save_path = os.path.join(base_dir, 'shift_flip')

@@ -1,9 +1,12 @@
 import numpy as np
 import os, time
 from setting import seq_length
-from config import base_dir
+from dotenv import load_dotenv
 
 # 넘파이 파일을 concatenate 후 시퀀스 배열로 변환하는 코드
+
+load_dotenv()
+base_dir = os.getenv('BASE_DIR')
 
 folder_path = os.path.join(base_dir, "shift_flip")
 seq_save_path = os.path.join(base_dir, "seq_angle_data")

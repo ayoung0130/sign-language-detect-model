@@ -1,10 +1,12 @@
 import cv2, os
+from dotenv import load_dotenv
 
 # 수어 데이터셋 영상 크기와 비율을 조정하는 코드
 
-name = "토하다"
+load_dotenv()
+base_dir = os.getenv('BASE_DIR')
 
-base_dir = os.environ.get('DESKTOP_DIR', os.path.join(os.path.expanduser('~'), 'Desktop'))
+name = "토하다"
 
 # 파일 경로
 video_files = [os.path.join(base_dir, f"origival_video/ID_1/{name}(정).avi"), os.path.join(base_dir, f"origival_video/ID_1/{name}(측).avi"),

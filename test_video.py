@@ -4,9 +4,12 @@ from setting import actions, seq_length
 from keras.models import load_model
 from landmark_processing import get_landmarks
 from collections import Counter
-from config import base_dir
+from dotenv import load_dotenv
 
 # 촬영한 비디오로 모델 예측을 수행하는 코드
+
+load_dotenv()
+base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
 model = load_model('models/model_0616.h5')

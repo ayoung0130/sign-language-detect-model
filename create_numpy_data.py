@@ -3,9 +3,12 @@ import numpy as np
 import os, time
 from setting import actions
 from landmark_processing import get_landmarks
-from config import base_dir
+from dotenv import load_dotenv
 
 # 영상을 넘파이 배열로 변환하는 코드
+
+load_dotenv()
+base_dir = os.getenv('BASE_DIR')
 
 # 동영상 파일 설정
 # 인덱스 0(가렵다), 1(기절), 2(부러지다), 3(어제), 4(어지러움), 5(열나다), 6(오늘), 7(진통제), 8(창백하다), 9(토하다)

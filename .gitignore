@@ -1,2 +1,5 @@
-# Ignore config.py
-config.py
+# Ignore env
+.env
+
+# 그 외
+__pycache__/

@@ -2,12 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from setting import actions
-from config import base_dir
+from dotenv import load_dotenv
 
 # 모델이 예측 수행한 정확도를 그래프로 가시화하는 코드
 # 그 외 데이터도 그래프로 표현 가능
 
-# To-do: 그래프를 더 의미있는 자료로 나타낼 방안 논의 (한 프레임당의 정확도는 중요x?)
+load_dotenv()
+base_dir = os.getenv('BASE_DIR')
 
 idx = 1
 action = actions[idx]
