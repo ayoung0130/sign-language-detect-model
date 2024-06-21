@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, "shift_flip")
+folder_name = "shift_flip"
+folder_path = os.path.join(base_dir, folder_name)
 seq_save_path = os.path.join(base_dir, "seq_angle_data")
 
 full_seq_data = []
@@ -34,6 +35,6 @@ full_seq_data = np.concatenate(full_seq_data, axis=0)
 
 created_time = int(time.time())
 
-np.save(os.path.join(seq_save_path, f'seq_{created_time}'), full_seq_data)
+np.save(os.path.join(seq_save_path, f'seq_{folder_name}_{created_time}'), full_seq_data)
 print("full seq data shape:",  full_seq_data.shape)
 print(f"npy 파일 개수: {count}개")

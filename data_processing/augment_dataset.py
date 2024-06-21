@@ -13,7 +13,7 @@ folder_path = os.path.join(base_dir, 'angle_flip')
 save_path = os.path.join(base_dir, 'shift_flip')
 
 def augment_data():
-    scales = [0.8, 0.9, 1.1, 1.2]
+    scales = [0.9, 1.1]
 
     for npy_file in os.listdir(folder_path):
         # 파일 불러오기

@@ -7,7 +7,7 @@ import glob
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-idx = 22
+idx = 48
 
 # 파일 경로 패턴
 file_patterns = [f"{idx}_front*", f"{idx}_side*"]
