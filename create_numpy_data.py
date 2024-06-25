@@ -11,7 +11,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 오른쪽(47), 왼쪽(48)은 flip X
-idx_list = []
+idx_list = [11, 13, 19, 42, 43, 49]
 
 # 동영상 파일 설정
 for idx in idx_list:
@@ -21,10 +21,10 @@ for idx in idx_list:
 
     # 데이터 저장 경로
     save_path = os.path.join(base_dir, "angle")
-    # flip_save_path = os.path.join(base_dir, "angle_flip")
+    flip_save_path = os.path.join(base_dir, "angle_flip")
 
     data = []
-    # flip_data = []
+    flip_data = []
     video_num = 0
 
     for video_file in os.listdir(folder_path):
@@ -48,14 +48,14 @@ for idx in idx_list:
             data.append(d)
 
             # 좌우반전된 프레임 처리
-            # flipped_frame = cv2.flip(frame, 1)
-            # d_flipped, flipped_frame = get_landmarks(flipped_frame, True)
-            # d_flipped = np.append(d_flipped, idx)
-            # flip_data.append(d_flipped)
+            flipped_frame = cv2.flip(frame, 1)
+            d_flipped, flipped_frame = get_landmarks(flipped_frame, True)
+            d_flipped = np.append(d_flipped, idx)
+            flip_data.append(d_flipped)
 
             # 화면에 표시
             cv2.imshow('Original', original_frame)
-            # cv2.imshow('Flipped', flipped_frame)
+            cv2.imshow('Flipped', flipped_frame)
             if cv2.waitKey(1) == ord('q'):
                 break
 
@@ -70,7 +70,7 @@ for idx in idx_list:
 
     # 넘파이 데이터 저장
     np.save(os.path.join(save_path, f'{action}_{created_time}'), data)
-    # np.save(os.path.join(flip_save_path, f'flip_{action}_{created_time}'), flip_data)
+    np.save(os.path.join(flip_save_path, f'flip_{action}_{created_time}'), flip_data)
 
     # 사용된 함수, 자원 해제
     cv2.destroyAllWindows()

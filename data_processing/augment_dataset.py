@@ -8,7 +8,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 6/16 - shift
-folder_path = os.path.join(base_dir, 'angle_flip')
+folder_path = os.path.join(base_dir, 'angle_new')
 
 save_path = os.path.join(base_dir, 'shift_flip')
 
