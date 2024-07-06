@@ -15,7 +15,7 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model_50words_0630.h5')
 
 # 비디오 파일 설정
-video_source = os.path.join(base_dir, 'test_video')
+video_source = os.path.join(base_dir, 'test_video/1_test')
 
 # 동영상 파일 목록 랜덤으로 섞기
 video_files = os.listdir(video_source)
