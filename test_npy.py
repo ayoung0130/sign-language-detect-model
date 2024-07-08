@@ -12,7 +12,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model_97.6_0707.h5')
+model = load_model('models/model.h5')
 
 # 비디오 파일 설정
 npy_data = os.path.join(base_dir, 'test')
@@ -84,7 +84,7 @@ print("결과")
 for action, correct in action_correct_counts.items():
     word_count = 6
     if "오른쪽" in action or "왼쪽" in action:
-        word_count = 4
+        word_count = 3
     accuracy = (correct / word_count) * 100
     print(f"{action} --> {accuracy:.2f}% ({correct} / {word_count})")
 
