@@ -18,7 +18,7 @@ count = 0
 for npy_file in os.listdir(folder_path):
     # 파일 불러오기
     file_path = os.path.join(folder_path, npy_file)
-    data = np.load(file_path)
+    data = np.load(file_path).astype(np.float32)
 
     # 시퀀스 데이터 생성
     # 시퀀스 단위 수정
