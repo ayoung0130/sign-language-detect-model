@@ -12,7 +12,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model_50words_0630.h5')
+model = load_model('models/model_97.3_0708.h5')
 
 # 비디오 파일 설정
 video_source = os.path.join(base_dir, 'test_video/1_test')
