@@ -37,7 +37,7 @@ for npy_file in npy_files:
 
     data = np.load(file_path)
 
-    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
+    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 1)]
     full_seq_data = np.array(full_seq_data)
     print(full_seq_data.shape)
 
