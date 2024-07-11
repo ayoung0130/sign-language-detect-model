@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_name = "shift_flip"
+folder_name = "shift"
 folder_path = os.path.join(base_dir, folder_name)
 seq_save_path = os.path.join(base_dir, "seq_angle_data")
 
@@ -24,10 +24,10 @@ for npy_file in os.listdir(folder_path):
     # 시퀀스 단위 수정
 
     # Sequence = 30, Jumping = 10
-    # data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
+    data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
 
     # Sequence = 30, Jumping = 30
-    data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 30)]
+    # data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 30)]
 
     data = np.array(data)
     print(f"{os.path.basename(file_path)} seq data shape:", data.shape)
