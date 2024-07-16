@@ -8,9 +8,9 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 6/16 - shift
-folder_path = os.path.join(base_dir, 'angle_flip')
+folder_path = os.path.join(base_dir, 'angle_npy_flip')
 
-save_path = os.path.join(base_dir, 'shift_flip')
+save_path = os.path.join(base_dir, 'angle_npy_shift_flip')
 
 def augment_data():
     scales = [0.8, 1.2]
