@@ -12,10 +12,10 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model.h5')
+model = load_model('models/model_10_words.h5')
 
 # 비디오 파일 설정
-npy_data = os.path.join(base_dir, 'test')
+npy_data = os.path.join(base_dir, 'test_10_words')
 
 # 동영상 파일 목록 랜덤으로 섞기
 npy_files = os.listdir(npy_data)
@@ -37,7 +37,7 @@ for npy_file in npy_files:
 
     data = np.load(file_path)
 
-    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 1)]
+    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
     full_seq_data = np.array(full_seq_data)
     print(full_seq_data.shape)
 
