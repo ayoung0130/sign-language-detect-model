@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_name = "angle_npy_shift"
+folder_name = "angle_npy_shift_flip"
 folder_path = os.path.join(base_dir, folder_name)
 seq_save_path = os.path.join(base_dir, "seq_angle_data")
 
