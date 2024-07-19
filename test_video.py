@@ -12,10 +12,10 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model_97.3_0708.h5')
+model = load_model('models/model_10_words.h5')
 
 # 비디오 파일 설정
-video_source = os.path.join(base_dir, 'test_video/1_test')
+video_source = os.path.join(base_dir, 'test_10_words_video')
 
 # 동영상 파일 목록 랜덤으로 섞기
 video_files = os.listdir(video_source)
@@ -71,26 +71,30 @@ for video_file in video_files:
             predicted_class = np.argmax(frame_predictions)
             predicted_classes.append(predicted_class)
 
-    print(predicted_classes)
+    # predicted_class가 없다면(95% 이상인 경우가 없다면)
+    if not predicted_classes:
+        print("신뢰도가 낮습니다")
+        print("정답: ", base_name)
+    else:
+        print(predicted_classes)
+        # 다수결 투표 방식으로 최종 예측 결정
+        vote_counts = Counter(predicted_classes)
+        final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
 
-    # 다수결 투표 방식으로 최종 예측 결정
-    vote_counts = Counter(predicted_classes)
-    final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
+        action = actions[final_prediction]
 
-    action = actions[final_prediction]
+        # 정답 출력/개수 계산
+        print("예측결과: ", action)
+        print("정답: ", base_name)
+        if action in base_name:
+            correct_count += 1
+            action_correct_counts[action] += 1
+            if "3" in base_name:
+                flip_correct_count += 1
 
-    # 정답 출력/개수 계산
-    print("예측결과: ", action)
-    print("정답: ", base_name)
-    if action in base_name:
-        correct_count += 1
-        action_correct_counts[action] += 1
-        if "3" in base_name:
-            flip_correct_count += 1
-
-    # # 예측값을 넘파이 파일로 저장
-    # save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
-    # np.save(save_path, y_pred)
+        # # 예측값을 넘파이 파일로 저장
+        # save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
+        # np.save(save_path, y_pred)
 
 cv2.destroyAllWindows()
 
@@ -99,8 +103,8 @@ print("결과")
 
 # 각 action별 정답 확률 출력
 for action, correct in action_correct_counts.items():
-    accuracy = (correct / 4 * 100)
-    print(f"{action} --> {accuracy:.2f}% ({correct}/4)")
+    accuracy = (correct / 3 * 100)
+    print(f"{action} --> {accuracy:.2f}% ({correct}/3)")
 
 # 총 정답 개수
 print("\n총 정답 수:", correct_count, "/", video_file_count)

@@ -2,7 +2,6 @@ import os, random
 import numpy as np
 from setting import actions, seq_length
 from keras.models import load_model
-from landmark_processing import get_landmarks
 from collections import Counter
 from dotenv import load_dotenv
 
@@ -12,10 +11,10 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model.h5')
+model = load_model('models/model_10_words.h5')
 
 # 비디오 파일 설정
-npy_data = os.path.join(base_dir, 'test_10_words')
+npy_data = os.path.join(base_dir, 'test_10_words_npy')
 
 # 동영상 파일 목록 랜덤으로 섞기
 npy_files = os.listdir(npy_data)
@@ -44,15 +43,15 @@ for npy_file in npy_files:
     # 예측
     y_pred = model.predict(full_seq_data)
 
-    # 각 프레임의 가장 높은 확률을 가지는 클래스 선택 (90% 이상일 때만)
+    # 각 프레임의 가장 높은 확률을 가지는 클래스 선택 (95% 이상일 때만)
     predicted_classes = []
     for frame_predictions in y_pred:
         max_prob = np.max(frame_predictions)
-        if max_prob >= 0.90:
+        if max_prob >= 0.95:
             predicted_class = np.argmax(frame_predictions)
             predicted_classes.append(predicted_class)
 
-    # predicted_class가 없다면(90% 이상인 경우가 없다면)
+    # predicted_class가 없다면(95% 이상인 경우가 없다면)
     if not predicted_classes:
         print("신뢰도가 낮습니다")
         print("정답: ", base_name)

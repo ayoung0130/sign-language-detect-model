@@ -61,7 +61,7 @@ for idx in idx_list:
 
     # 넘파이 배열로 생성
     data = np.array(data)
-    # flip_data = np.array(flip_data)
+    flip_data = np.array(flip_data)
     print("data shape: ", action, data.shape)
     print(data[50])
     print("영상 개수: ", video_num)
