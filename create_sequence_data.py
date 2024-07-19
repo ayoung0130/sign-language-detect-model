@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_name = "angle_npy_shift_flip"
+folder_name = "npy_angle_shift_flip"
 folder_path = os.path.join(base_dir, folder_name)
-seq_save_path = os.path.join(base_dir, "seq_angle_data")
+seq_save_path = os.path.join(base_dir, "seq_angle")
 
 # 포함해야 할 단어 리스트
 keywords = ['가렵다', '기절', '부러지다', '어제', '어지러움', '열나다', '오늘', '진통제', '창백하다', '토하다']
