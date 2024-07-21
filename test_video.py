@@ -12,10 +12,10 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model_10_words.h5')
+model = load_model('models/model.h5')
 
 # 비디오 파일 설정
-video_source = os.path.join(base_dir, 'test_10_words_video')
+video_source = os.path.join(base_dir, 'test_video_10_words')
 
 # 동영상 파일 목록 랜덤으로 섞기
 video_files = os.listdir(video_source)
