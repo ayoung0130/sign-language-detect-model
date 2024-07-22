@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os, time
+from setting import seq_length
 from landmark_processing import get_landmarks
 from dotenv import load_dotenv
 
@@ -9,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"test_video/3_test_10_words")
+folder_path = os.path.join(base_dir, f"test_video/1_test_10_words")
 
 # 데이터 저장 경로
 save_path = os.path.join(base_dir, "test")
@@ -52,7 +53,8 @@ for video_file in os.listdir(folder_path):
         if cv2.waitKey(1) == ord('q'):
             break
 
-    # 넘파이 배열로 생성
+    cap.release()
+
     data = np.array(data)
     flip_data = np.array(flip_data)
     print("data shape: ", data.shape)

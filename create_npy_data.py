@@ -13,18 +13,18 @@ base_dir = os.getenv('BASE_DIR')
 # 오른쪽(47), 왼쪽(48)은 flip X
 idx_list = [i for i in range(50) if i not in [0,1,2,3,4,5,6,7,8,9, 47, 48]]
 
+# 데이터 저장 경로
+save_path = os.path.join(base_dir, "npy_angle")
+flip_save_path = os.path.join(base_dir, "npy_angle_flip")
+
+no_angle_save_path = os.path.join(base_dir, "npy")
+no_angle_flip_save_path = os.path.join(base_dir, "npy_flip")
+
 # 동영상 파일 설정
 for idx in idx_list:
 
     action = actions[idx]
     folder_path = os.path.join(base_dir, f"video/resized_video_{idx}")
-
-    # 데이터 저장 경로
-    save_path = os.path.join(base_dir, "npy_angle")
-    flip_save_path = os.path.join(base_dir, "npy_angle_flip")
-
-    no_angle_save_path = os.path.join(base_dir, "npy")
-    no_angle_flip_save_path = os.path.join(base_dir, "npy_flip")
 
     data = []
     flip_data = []
