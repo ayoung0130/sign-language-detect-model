@@ -12,7 +12,7 @@ folder_path = os.path.join(base_dir, 'npy_angle_flip_10_words')
 save_path = os.path.join(base_dir, 'npy_angle_shift_flip_10_words')
 
 def augment_data():
-    scales = [0.8, 0.9, 1.1, 1.2]
+    scales = [0.9, 1.1]
 
     for npy_file in os.listdir(folder_path):
         file_path = os.path.join(folder_path, npy_file)
