@@ -17,6 +17,7 @@ def get_landmarks(frame, angle):
     joint_left_hands = np.zeros((21, 4))
     joint_right_hands = np.zeros((21, 4))
     joint_pose = np.zeros((21, 4))
+    joint = np.zeros((21, 12))
 
     # 손 검출시
     if results_hands.multi_hand_landmarks is not None:

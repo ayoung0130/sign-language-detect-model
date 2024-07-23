@@ -12,7 +12,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model_10words_100.h5')
+model = load_model('models/model_1103.h5')
 
 # 비디오 파일 설정
 video_source = os.path.join(base_dir, 'test_video_10_words')
@@ -70,6 +70,7 @@ for video_file in video_files:
     # 다수결 투표 방식으로 최종 예측 결정
     vote_counts = Counter(predicted_classes)
     final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
+    
     action = actions[final_prediction]
 
     # 정답 출력/개수 계산

@@ -11,7 +11,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model_10words_100.h5')
+model = load_model('models/model_1103.h5')
 
 # 넘파이 파일 설정
 npy_data = os.path.join(base_dir, 'test_npy_10_words')
@@ -42,14 +42,23 @@ for npy_file in npy_files:
     # 예측
     y_pred = model.predict(full_seq_data)
 
-    # 각 프레임의 가장 높은 확률을 가지는 클래스 선택
-    predicted_classes = np.argmax(y_pred, axis=1)
+    # 각 프레임의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
+    predicted_classes = []
+    for pred in y_pred:
+        max_prob = np.max(pred)
+        if max_prob >= 0.90:
+            predicted_class = np.argmax(pred)
+            predicted_classes.append(predicted_class)
+
     print(predicted_classes)
 
     # 다수결 투표 방식으로 최종 예측 결정
-    vote_counts = Counter(predicted_classes)
-    final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
-    action = actions[final_prediction]
+    if predicted_classes:  # predicted_classes가 비어있지 않은 경우에만 처리
+        vote_counts = Counter(predicted_classes)
+        final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
+        action = actions[final_prediction]
+    else:
+        action = None  # 신뢰도 90% 이상의 예측이 없는 경우 처리
 
     # 정답 출력/개수 계산
     print("예측결과: ", action)
