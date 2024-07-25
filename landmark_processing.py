@@ -50,9 +50,8 @@ def get_landmarks(frame, angle):
         # joint (총 데이터 4*21*3 = 252)
         return joint.flatten(), frame
     elif angle is True:
-        angles = np.concatenate((angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)))
         # joint + 각도 (총 데이터 4*21*3 + 45 = 297)
-        return np.concatenate((joint.flatten(), angles)), frame
+        return np.concatenate((joint.flatten(), angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose))), frame
 
 
 def angle_hands(joint_hands):
