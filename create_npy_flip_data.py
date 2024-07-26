@@ -11,16 +11,15 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "npy_angle")
 flip_save_path = os.path.join(base_dir, "npy_angle_flip")
 
+# 오른쪽(47), 왼쪽(48)은 x
 # 동영상 파일 설정
-for idx in range(0, 10):
+for idx in range(0, 50):
 
     action = actions[idx]
     folder_path = os.path.join(base_dir, f"video/resized_video_{idx}")
 
-    data = []
     flip_data = []
     video_num = 0
 
@@ -34,15 +33,6 @@ for idx in range(0, 10):
             ret, frame = cap.read()
             if not ret:
                 break
-            
-            # 랜드마크, 프레임 가져오기
-            d, original_frame = get_landmarks(frame, True)
-            
-            # 인덱스 추가
-            d = np.append(d, idx)
-        
-            # 전체 데이터 배열에 추가
-            data.append(d)
 
             # 좌우반전된 프레임 처리
             flipped_frame = cv2.flip(frame, 1)
@@ -51,7 +41,6 @@ for idx in range(0, 10):
             flip_data.append(d_flipped)
 
             # 화면에 표시
-            cv2.imshow('Original', original_frame)
             cv2.imshow('Flipped', flipped_frame)
             if cv2.waitKey(1) == ord('q'):
                 break
@@ -59,15 +48,13 @@ for idx in range(0, 10):
         cap.release()  # 비디오 캡처 자원 해제
 
     # 넘파이 배열로 생성
-    data = np.array(data)
     flip_data = np.array(flip_data)
-    print("data shape: ", action, data.shape)
+    print("data shape: ", action, flip_data.shape)
     print("영상 개수: ", video_num)
 
     created_time = int(time.time())
 
     # 넘파이 데이터 저장
-    np.save(os.path.join(save_path, f'{action}_{created_time}'), data)
     np.save(os.path.join(flip_save_path, f'flip_{action}_{created_time}'), flip_data)
 
     # 사용된 함수, 자원 해제

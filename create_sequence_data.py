@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_name = "npy_angle_shift_flip_10_words"
+folder_name = "npy_angle_shift_flip"
 folder_path = os.path.join(base_dir, folder_name)
-seq_save_path = os.path.join(base_dir, "seq_angle_data_10_words")
+seq_save_path = os.path.join(base_dir, "seq_angle_data")
 
 full_seq_data = []
 count = 0
@@ -25,9 +25,6 @@ for npy_file in os.listdir(folder_path):
     # Sequence = 30, Jumping = 10
     data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
 
-    # Sequence = 30, Jumping = 30
-    # data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 30)]
-
     data = np.array(data)
     print(f"{os.path.basename(file_path)} seq data shape:", data.shape)
 
@@ -40,6 +37,6 @@ full_seq_data = np.concatenate(full_seq_data, axis=0)
 
 created_time = int(time.time())
 
-np.save(os.path.join(seq_save_path, f'seq_{folder_name}_10words_{created_time}'), full_seq_data)
+np.save(os.path.join(seq_save_path, f'seq_{folder_name}_{created_time}'), full_seq_data)
 print("full seq data shape:",  full_seq_data.shape)
 print(f"npy 파일 개수: {count}개")
