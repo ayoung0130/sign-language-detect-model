@@ -14,7 +14,7 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model.h5')
 
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, 'test_npy_10_words')
+npy_data = os.path.join(base_dir, 'test_npy')
 
 # 동영상 파일 목록 랜덤으로 섞기
 npy_files = os.listdir(npy_data)
@@ -57,28 +57,30 @@ for npy_file in npy_files:
         vote_counts = Counter(predicted_classes)
         final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
         action = actions[final_prediction]
+
+        # 정답 출력/개수 계산
+        print("예측결과: ", action)
+        print("정답: ", base_name)
+        if action in base_name:
+            correct_count += 1
+            action_correct_counts[action] += 1
+            if "flip" in base_name:
+                flip_correct_count += 1
+
     else:
-        action = None  # 신뢰도 90% 이상의 예측이 없는 경우 처리
+        print("신뢰도가 낮습니다.")
+        print("정답: ", base_name)
 
-    # 정답 출력/개수 계산
-    print("예측결과: ", action)
-    print("정답: ", base_name)
-    if action in base_name:
-        correct_count += 1
-        action_correct_counts[action] += 1
-        if "flip" in base_name:
-            flip_correct_count += 1
-
-    # # 예측값을 넘파이 파일로 저장
-    # save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
-    # np.save(save_path, y_pred)
+    # 예측값을 넘파이 파일로 저장
+    save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
+    np.save(save_path, y_pred)
 
 print("")
 print("결과")
 
 # 각 action별 정답 확률 출력
 for action, correct in action_correct_counts.items():
-    word_count = 6
+    word_count = 3
     if "오른쪽" in action or "왼쪽" in action:
         word_count = 3
     accuracy = (correct / word_count) * 100

@@ -14,7 +14,7 @@ idx = 1
 action = actions[idx]
 
 # 불러올 파일 경로 설정
-file_paths = [os.path.join(base_dir, f"pred/1_{action}.mp4_부러지다.npy")]
+file_paths = [os.path.join(base_dir, f"pred/1_귀.npy_내일.npy")]
 
 # 0번 인덱스에 해당하는 값을 저장할 리스트
 itch_data = []

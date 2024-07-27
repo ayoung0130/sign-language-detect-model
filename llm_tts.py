@@ -1,16 +1,13 @@
 import os
 import openai
 from dotenv import load_dotenv
+from gtts import gTTS
+import os
+import playsound
 
 #pip install speechrecognition
 #pip install gTTs
 #pip install playsound==1.2.2
-#tts
-import speech_recognition as sr
-from gtts import gTTS
-import os
-import time
-import playsound
 
 load_dotenv()
 
@@ -27,10 +24,10 @@ def words_to_sentence(words):
         messages=[
             {"role": "system", "content": "You are an assistant who helps to connect words provided by patients in sign language into natural sentences in a medical institution."},
             {"role": "system", "content": "i will give you some examples in korean, and you respond korean too"},
-            {"role": "system", "content": "질문 : [머리] , [어지럽다].  답변 : 머리가 어지러워요. "},
-            {"role": "system", "content": "질문 : [어제] , [부터] , [배] , [너무 아파요]. 답변 : 어제부터 배가 아파요. " },
-            {"role": "system", "content": "질문 : [열나다] , [기침하다]. 답변 : 열이나고 기침을 해요. "},
-            {"role": "system", "content": "질문 : [오늘], [부터]. 답변: 오늘부터요."},
+            {"role": "system", "content": "수어 : [머리] , [어지럽다].  문장 : 머리가 어지러워요. "},
+            {"role": "system", "content": "수어 : [어제] , [부터] , [배] , [너무 아파요]. 문장 : 어제부터 배가 아파요. " },
+            {"role": "system", "content": "수어 : [열나다] , [기침하다]. 문장 : 열이나고 기침을 해요. "},
+            {"role": "system", "content": "수어 : [오늘], [부터]. 문장 : 오늘부터요."},
             {"role": "user", "content": prompt}
         ],
         n=1,    

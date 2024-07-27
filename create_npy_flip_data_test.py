@@ -10,10 +10,10 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"test_video/1_test_10_words")
+folder_path = os.path.join(base_dir, f"test_video/3_test")
 
 # 데이터 저장 경로
-flip_save_path = os.path.join(base_dir, "test")
+flip_save_path = os.path.join(base_dir, "test_npy")
 
 video_num = 0
 
