@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
-import os, time
-from setting import seq_length
+import os
 from landmark_processing import get_landmarks
 from dotenv import load_dotenv
 
@@ -10,14 +9,13 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"test_video/3_test")
+folder_path = os.path.join(base_dir, f"test_video/1_test")
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "test_npy")
+save_path = os.path.join(base_dir, "test_npy/landmarks")
 
 video_num = 0
 
-# original frame 처리
 for video_file in os.listdir(folder_path):
     video_num += 1
     # 동영상 불러오기
@@ -33,13 +31,14 @@ for video_file in os.listdir(folder_path):
             break
         
         # 랜드마크, 프레임 가져오기
-        d, original_frame = get_landmarks(frame, True)
+        d, frame = get_landmarks(frame)
     
         # 전체 데이터 배열에 추가
-        data.append(d)
+        if d is not None:
+            data.append(d)
 
         # 화면에 표시
-        cv2.imshow('Original', original_frame)
+        cv2.imshow('test video', frame)
         if cv2.waitKey(1) == ord('q'):
             break
 
@@ -47,6 +46,8 @@ for video_file in os.listdir(folder_path):
 
     # 넘파이 배열로 생성
     data = np.array(data)
+    if len(data) >= 50:
+        print(data[50])
     print("data shape: ", data.shape)
 
     # 넘파이 데이터 저장

@@ -12,7 +12,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model_10words_98.33.h5')
+model = load_model('models/model.h5')
 
 # 비디오 파일 설정
 video_source = os.path.join(base_dir, 'test_video_10_words')
@@ -55,6 +55,7 @@ for video_file in video_files:
 
     cap.release()
     data = np.array(data)
+    np.save(os.path.join(base_dir, 'numpy file'), data)
 
     full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
     full_seq_data = np.array(full_seq_data)

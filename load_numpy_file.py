@@ -1,12 +1,12 @@
 import numpy as np
 
 # 파일 경로
-file_1_path = '1_가렵다_flip_test.npy'
-file_2_path = '1_가렵다.npy'
+file_1_path = 'numpy file.npy'
+file_2_path = 'flip_3_오늘.npy'
 
 # 넘파이 파일 로드
-file_1 = np.load(file_1_path, allow_pickle=True)
-file_2 = np.load(file_2_path, allow_pickle=True)
+file_1 = np.load(file_1_path)
+file_2 = np.load(file_2_path)
 
 # 데이터 형태 비교
 shape_1 = file_1.shape

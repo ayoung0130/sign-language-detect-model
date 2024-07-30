@@ -14,7 +14,7 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model.h5')
 
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, 'test_npy')
+npy_data = os.path.join(base_dir, 'test_npy_10_words')
 
 # 동영상 파일 목록 랜덤으로 섞기
 npy_files = os.listdir(npy_data)
@@ -80,7 +80,7 @@ print("결과")
 
 # 각 action별 정답 확률 출력
 for action, correct in action_correct_counts.items():
-    word_count = 3
+    word_count = 6
     if "오른쪽" in action or "왼쪽" in action:
         word_count = 3
     accuracy = (correct / word_count) * 100
