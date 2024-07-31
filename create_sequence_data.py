@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_name = "npy_flip_shift"
-folder_path = os.path.join(base_dir, "npy_flip_shift/landmarks")
-seq_save_path = os.path.join(base_dir, "seq_data/landmarks")
+folder_name = "npy_flip_Shift"
+folder_path = os.path.join(base_dir, "npy_flip_Shift/landmarks_visibility")
+seq_save_path = os.path.join(base_dir, "seq_data/landmarks_visibility")
 
 full_seq_data = []
 count = 0

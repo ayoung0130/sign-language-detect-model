@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, 'npy_flip/landmarks')
-save_path = os.path.join(base_dir, 'npy_flip_shift/landmarks')
+folder_path = os.path.join(base_dir, 'npy_flip/landmarks_visibility')
+save_path = os.path.join(base_dir, 'npy_flip_shift/landmarks_visibility')
 
 # landmarks -> 190(idx 포함), landmarks_visibility -> 253(idx 포함)
 
