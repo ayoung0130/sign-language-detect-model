@@ -1,8 +1,8 @@
 import numpy as np
 
 # 파일 경로
-file_1_path = 'numpy file.npy'
-file_2_path = 'flip_3_오늘.npy'
+file_1_path = '.npy'
+file_2_path = '.npy'
 
 # 넘파이 파일 로드
 file_1 = np.load(file_1_path)

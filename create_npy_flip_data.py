@@ -11,7 +11,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "")
+save_path = os.path.join(base_dir, "npy_flip/landmarks_visibility")
 
 # 동영상 파일 설정
 for idx in range(0, 10):
@@ -32,9 +32,11 @@ for idx in range(0, 10):
             ret, frame = cap.read()
             if not ret:
                 break
+
+            flipped_frame = cv2.flip(frame, 1)
             
             # 랜드마크, 프레임 가져오기
-            d, frame = get_landmarks_visibility(frame)
+            d, flipped_frame = get_landmarks_visibility(flipped_frame)
             
             if d is not None:
 
@@ -45,7 +47,7 @@ for idx in range(0, 10):
                 data.append(d)
 
             # 화면에 표시
-            cv2.imshow('video', frame)
+            cv2.imshow('video', flipped_frame)
             if cv2.waitKey(1) == ord('q'):
                 break
 
@@ -60,7 +62,7 @@ for idx in range(0, 10):
     created_time = int(time.time())
 
     # 넘파이 데이터 저장
-    np.save(os.path.join(save_path, f'{action}_{created_time}'), data)
+    np.save(os.path.join(save_path, f'flip_{action}_{created_time}'), data)
 
     # 사용된 함수, 자원 해제
     cv2.destroyAllWindows()

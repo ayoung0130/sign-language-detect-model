@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"10_words")
+folder_path = os.path.join(base_dir, f"10_words_3")
 
 # 데이터 저장 경로
 save_path = os.path.join(base_dir, "test_npy/landmarks_visibility")
@@ -29,16 +29,18 @@ for video_file in os.listdir(folder_path):
         ret, frame = cap.read()
         if not ret:
             break
+
+        flipped_frame = cv2.flip(frame, 1)
         
         # 랜드마크, 프레임 가져오기
-        d, frame = get_landmarks_visibility(frame)
+        d, flipped_frame = get_landmarks_visibility(flipped_frame)
     
         # 전체 데이터 배열에 추가
         if d is not None:
             data.append(d)
 
         # 화면에 표시
-        cv2.imshow('test video', frame)
+        cv2.imshow('test video', flipped_frame)
         if cv2.waitKey(1) == ord('q'):
             break
 

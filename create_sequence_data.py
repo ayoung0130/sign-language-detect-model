@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_name = "npy_angle_shift_flip"
-folder_path = os.path.join(base_dir, folder_name)
-seq_save_path = os.path.join(base_dir, "seq_angle_data")
+folder_name = "npy_flip_shift"
+folder_path = os.path.join(base_dir, "npy_flip_shift/landmarks")
+seq_save_path = os.path.join(base_dir, "seq_data/landmarks")
 
 full_seq_data = []
 count = 0
@@ -21,7 +21,6 @@ for npy_file in os.listdir(folder_path):
     data = np.load(file_path)
 
     # 시퀀스 데이터 생성
-
     # Sequence = 30, Jumping = 10
     data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
 

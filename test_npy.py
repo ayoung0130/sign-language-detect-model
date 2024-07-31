@@ -14,7 +14,7 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model.h5')
 
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, 'test_npy_10_words')
+npy_data = os.path.join(base_dir, 'test_npy/landmarks')
 
 # 동영상 파일 목록 랜덤으로 섞기
 npy_files = os.listdir(npy_data)
@@ -72,8 +72,8 @@ for npy_file in npy_files:
         print("정답: ", base_name)
 
     # 예측값을 넘파이 파일로 저장
-    save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
-    np.save(save_path, y_pred)
+    # save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
+    # np.save(save_path, y_pred)
 
 print("")
 print("결과")
