@@ -9,8 +9,11 @@ def add_angle():
     load_dotenv()
     base_dir = os.getenv('BASE_DIR')
 
-    folder_path = os.path.join(base_dir, 'npy/landmarks')
-    save_path = os.path.join(base_dir, 'npy/landmarks_angle')
+    folder_path = os.path.join(base_dir, 'test_npy/landmarks')
+    save_path = os.path.join(base_dir, 'test_npy/landmarks_angle')
+
+    # 폴더 이름에 "visibility"가 포함되면 col을 4로, 그렇지 않으면 3으로 설정
+    col = 4 if "visibility" in folder_path else 3
 
     for npy_file in os.listdir(folder_path):
         file_path = os.path.join(folder_path, npy_file)
@@ -19,24 +22,33 @@ def add_angle():
         data = np.load(file_path)
         print(f"{base_name} 프레임 수: {data.shape[0]}. shape: {data.shape}")
 
-        # 열 개수 (visibility는 4)
-        colm = 3
-
         all_frames = []
 
         # 매 프레임마다
         for frame in range(0, data.shape[0]):
 
             # 데이터의 특정 범위를 추출하여 손과 포즈 랜드마크 할당
-            joint_left_hands = data[frame, 0:63].reshape(-1, colm)
-            joint_right_hands = data[frame, 63:126].reshape(-1, colm)
-            joint_pose = data[frame, 126:189].reshape(-1, colm)
+            if col == 3:
+                # only landmarks
+                joint_left_hands = data[frame, 0:63].reshape(-1, col)
+                joint_right_hands = data[frame, 63:126].reshape(-1, col)
+                joint_pose = data[frame, 126:189].reshape(-1, col)
+            elif col == 4:
+                # landmarks + visibility
+                joint_left_hands = data[frame, 0:84].reshape(-1, col)
+                joint_right_hands = data[frame, 84:168].reshape(-1, col)
+                joint_pose = data[frame, 168:252].reshape(-1, col)
 
             # 각도 값을 데이터에 삽입
             angles_combined = np.concatenate((angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)), axis=0)
             
             # 기존 데이터와 각도를 결합
-            combined_data = np.concatenate((data[frame, :-1], angles_combined, [data[frame, -1]]))
+            # 폴더 이름에 "test"가 포함되면 데이터 뒤에 바로 삽입, 포함되지 않으면 레이블 값 바로 전에 삽입
+            if "test" in folder_path :
+                combined_data = np.concatenate((data[frame], angles_combined))
+            else :
+                combined_data = np.concatenate((data[frame, :-1], angles_combined, [data[frame, -1]]))
+            
             all_frames.append(combined_data)
 
         # 리스트를 numpy 배열로 변환
@@ -46,6 +58,7 @@ def add_angle():
         np.save(os.path.join(save_path, base_name), data_with_angles)
         print(f"{base_name} 저장 완료. shape: {data_with_angles.shape}")
         print("")
+        print(f"데이터 체크 - {base_name} : {data_with_angles[10]}")
 
 def angle_hands(joint_hands):
     # 관절 간의 각도 계산

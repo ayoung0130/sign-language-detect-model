@@ -14,7 +14,7 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model.h5')
 
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, 'test_npy/landmarks_visibility')
+npy_data = os.path.join(base_dir, 'test_npy/landmarks_angle')
 
 # 동영상 파일 목록 랜덤으로 섞기
 npy_files = os.listdir(npy_data)
