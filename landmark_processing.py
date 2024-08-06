@@ -3,7 +3,7 @@ import cv2
 from setting import mp_hands, mp_pose, hands, pose, pose_landmark_indices, mp_drawing
 
 # 미디어파이프 hands, pose 모델의 랜드마크를 처리하는 코드
-# 랜드마크 추출, 각도값 계산
+# 랜드마크 추출
 # Input: 동영상 파일 / Output: 좌표값, 가시성정보 numpy 배열
 
 def get_landmarks(frame):
@@ -29,27 +29,24 @@ def get_landmarks(frame):
                     joint_right_hands[j] = [lm.x, lm.y, lm.z]
             
             # 손 랜드마크 그리기
-            mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS,
-                                      landmark_drawing_spec=mp_drawing.DrawingSpec(color=(0, 255, 0)) if handedness.classification[0].label == 'Left' else mp_drawing.DrawingSpec(color=(255, 0, 0)))
+            color = (0, 255, 0) if handedness.classification[0].label == 'Left' else (255, 0, 0)
+            mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS, landmark_drawing_spec=mp_drawing.DrawingSpec(color=color))
 
-        # 포즈 검출시
-        if results_pose.pose_landmarks is not None:
-            # 포즈 -> 지정한 관절에 대해서만 반복
-            for j, i in enumerate(pose_landmark_indices):
-                plm = results_pose.pose_landmarks.landmark[i]
-                joint_pose[j] = [plm.x, plm.y, plm.z]
-            
-            # 포즈 랜드마크 그리기
-            mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+    # 포즈 검출시
+    if results_pose.pose_landmarks is not None:
+        # 포즈 -> 지정한 관절에 대해서만 반복
+        for j, i in enumerate(pose_landmark_indices):
+            plm = results_pose.pose_landmarks.landmark[i]
+            joint_pose[j] = [plm.x, plm.y, plm.z]
         
-        # 왼손 + 오른손 + 포즈
-        joint = np.concatenate([joint_left_hands, joint_right_hands, joint_pose], axis=0)   # joint -> (63, 3)
-
-        # joint (총 데이터 3*21*3 = 189)
-        return joint.flatten(), frame
+        # 포즈 랜드마크 그리기
+        mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
     
-    # 손이 검출되지 않으면 None 반환
-    return None, frame
+    # 왼손 + 오른손 + 포즈
+    joint = np.concatenate([joint_left_hands, joint_right_hands, joint_pose], axis=0)   # joint -> (63, 3)
+
+    # joint (총 데이터 3*21*3 = 189)
+    return joint.flatten(), frame
 
 
 def get_landmarks_visibility(frame):
@@ -75,27 +72,24 @@ def get_landmarks_visibility(frame):
                     joint_right_hands[j] = [lm.x, lm.y, lm.z, set_visibility(lm.x, lm.y)]
             
             # 손 랜드마크 그리기
-            mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS,
-                                      landmark_drawing_spec=mp_drawing.DrawingSpec(color=(0, 255, 0)) if handedness.classification[0].label == 'Left' else mp_drawing.DrawingSpec(color=(255, 0, 0)))
+            color = (0, 255, 0) if handedness.classification[0].label == 'Left' else (255, 0, 0)
+            mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS, landmark_drawing_spec=mp_drawing.DrawingSpec(color=color))
 
-        # 포즈 검출시
-        if results_pose.pose_landmarks is not None:
-            # 포즈 -> 지정한 관절에 대해서만 반복
-            for j, i in enumerate(pose_landmark_indices):
-                plm = results_pose.pose_landmarks.landmark[i]
-                joint_pose[j] = [plm.x, plm.y, plm.z, plm.visibility]
+    # 포즈 검출시
+    if results_pose.pose_landmarks is not None:
+        # 포즈 -> 지정한 관절에 대해서만 반복
+        for j, i in enumerate(pose_landmark_indices):
+            plm = results_pose.pose_landmarks.landmark[i]
+            joint_pose[j] = [plm.x, plm.y, plm.z, plm.visibility]
 
-            # 포즈 랜드마크 그리기
-            mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+        # 포즈 랜드마크 그리기
+        mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
-        # 왼손 + 오른손 + 포즈
-        joint = np.concatenate([joint_left_hands, joint_right_hands, joint_pose], axis=0)      # joint -> (63, 4)
+    # 왼손 + 오른손 + 포즈
+    joint = np.concatenate([joint_left_hands, joint_right_hands, joint_pose], axis=0)      # joint -> (63, 4)
 
-        # joint (총 데이터 4*21*3 = 252)
-        return joint.flatten(), frame
-    
-    # 손이 검출되지 않으면 None 반환
-    return None, frame
+    # joint (총 데이터 4*21*3 = 252)
+    return joint.flatten(), frame
 
 
 def set_visibility(x, y, epsilon=1e-6):

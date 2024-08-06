@@ -9,8 +9,8 @@ def add_angle():
     load_dotenv()
     base_dir = os.getenv('BASE_DIR')
 
-    folder_path = os.path.join(base_dir, 'test_npy/landmarks')
-    save_path = os.path.join(base_dir, 'test_npy/landmarks_angle')
+    folder_path = os.path.join(base_dir, 'npy_flip/landmarks_visibility')
+    save_path = os.path.join(base_dir, 'npy_flip/landmarks_visibility_angle')
 
     # 폴더 이름에 "visibility"가 포함되면 col을 4로, 그렇지 않으면 3으로 설정
     col = 4 if "visibility" in folder_path else 3

@@ -11,7 +11,8 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "")
+save_path = os.path.join(base_dir, "npy/landmarks")
+save_path_visibility = os.path.join(base_dir, "npy/landmarks_visibility")
 
 # 동영상 파일 설정
 for idx in range(0, 10):
@@ -20,6 +21,7 @@ for idx in range(0, 10):
     folder_path = os.path.join(base_dir, f"video/resized_video_{idx}")
 
     data = []
+    data_visibility = []
     video_num = 0
 
     for video_file in os.listdir(folder_path):
@@ -34,15 +36,19 @@ for idx in range(0, 10):
                 break
             
             # 랜드마크, 프레임 가져오기
-            d, frame = get_landmarks_visibility(frame)
-            
-            if d is not None:
+            d, frame = get_landmarks(frame)
+            d_visibility, frame_visibility = get_landmarks_visibility(frame)
+           
+            # 인덱스 추가
+            d = np.append(d, idx)
+            d_visibility = np.append(d_visibility, idx)
 
-                # 인덱스 추가
-                d = np.append(d, idx)
+            # 전체 데이터 배열에 추가
+            data.append(d)
+            data_visibility.append(d_visibility)
 
-                # 전체 데이터 배열에 추가
-                data.append(d)
+            print(d)
+            print(d_visibility)
 
             # 화면에 표시
             cv2.imshow('video', frame)
@@ -53,14 +59,18 @@ for idx in range(0, 10):
 
     # 넘파이 배열로 생성
     data = np.array(data)
+    data_visibility = np.array(data_visibility)
     print(data[200])
+    print(data_visibility[200])
     print("data shape: ", action, data.shape)
+    print("data shape: ", action, data_visibility.shape)
     print("영상 개수: ", video_num)
 
     created_time = int(time.time())
 
     # 넘파이 데이터 저장
-    np.save(os.path.join(save_path, f'{action}_{created_time}'), data)
+    # np.save(os.path.join(save_path, f'{action}_{created_time}'), data)
+    # np.save(os.path.join(save_path_visibility, f'{action}_{created_time}'), data_visibility)
 
     # 사용된 함수, 자원 해제
     cv2.destroyAllWindows()
