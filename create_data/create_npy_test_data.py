@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import os
-from landmark_processing import get_test_landmarks_visibility
+from data_processing.landmark_processing import get_test_landmarks_visibility
 from dotenv import load_dotenv
 
 # 테스트 영상을 넘파이 배열로 변환하는 코드
@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"10_words_3")
+folder_path = os.path.join(base_dir, f"10_words")
 
 # 데이터 저장 경로
 save_path = os.path.join(base_dir, "test_npy/landmarks")
@@ -61,7 +61,7 @@ for video_file in os.listdir(folder_path):
     print("visibility data shape: ", data_visibility.shape)
 
     # 넘파이 데이터 저장
-    np.save(os.path.join(save_path, f'flip_{base_name}'), data)
-    np.save(os.path.join(save_path_visibility, f'flip_{base_name}'), data)
+    np.save(os.path.join(save_path, f'{base_name}'), data)
+    np.save(os.path.join(save_path_visibility, f'{base_name}'), data_visibility)
 
 cv2.destroyAllWindows()

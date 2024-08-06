@@ -3,7 +3,7 @@ import numpy as np
 from setting import actions, font
 from keras.models import load_model
 from PIL import ImageDraw, Image
-from landmark_processing import get_landmarks
+from data_processing.landmark_processing import get_landmarks
 from setting import hands
 from collections import Counter
 

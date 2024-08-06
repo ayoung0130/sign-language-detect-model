@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os, time
 from setting import actions
-from landmark_processing import get_landmarks_visibility
+from data_processing.landmark_processing import get_landmarks_visibility
 from dotenv import load_dotenv
 
 # 영상을 넘파이 배열로 변환하는 코드

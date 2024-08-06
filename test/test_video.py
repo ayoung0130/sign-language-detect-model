@@ -2,7 +2,7 @@ import cv2, os, random
 import numpy as np
 from setting import actions, seq_length
 from keras.models import load_model
-from landmark_processing import get_landmarks
+from data_processing.landmark_processing import get_landmarks
 from collections import Counter
 from dotenv import load_dotenv
 
