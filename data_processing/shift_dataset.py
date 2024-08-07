@@ -18,7 +18,7 @@ col = 4 if "visibility" in folder_path else 3
 # landmarks -> 190(idx 포함), landmarks_visibility -> 253(idx 포함)
 
 def shift_data():
-    scales = [0.8, 1.2]
+    scales = [0.9, 1.1]
 
     for npy_file in os.listdir(folder_path):
         file_path = os.path.join(folder_path, npy_file)

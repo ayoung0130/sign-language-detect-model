@@ -2,7 +2,7 @@ import cv2, os, random
 import numpy as np
 from setting import actions, seq_length
 from keras.models import load_model
-from data_processing.landmark_processing import get_landmarks
+from data_processing.landmark_processing import get_test_landmarks_visibility
 from collections import Counter
 from dotenv import load_dotenv
 
@@ -43,7 +43,7 @@ for video_file in video_files:
             break
 
         # 랜드마크, 프레임 가져오기
-        d, frame = get_landmarks(frame, True)
+        d, d_visibility, frame = get_test_landmarks_visibility(frame)
         
         # 전체 데이터 배열에 추가
         data.append(d)
@@ -55,7 +55,6 @@ for video_file in video_files:
 
     cap.release()
     data = np.array(data)
-    np.save(os.path.join(base_dir, 'numpy file'), data)
 
     full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
     full_seq_data = np.array(full_seq_data)

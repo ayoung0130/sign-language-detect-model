@@ -10,9 +10,9 @@ base_dir = os.getenv('BASE_DIR')
 
 # "npy" "npy_flip" "npy_shift" "npy_flip_shift"
 # "landmarks" "landmarks_angle" "landmarks_visibility" "landmarks_visibility_angle"
-folder_name = "npy"
-folder_path = os.path.join(base_dir, f"{folder_name}/landmarks")
-seq_save_path = os.path.join(base_dir, "seq_data/landmarks")
+folder_name = "npy_flip_shift"
+folder_path = os.path.join(base_dir, f"{folder_name}/landmarks_visibility_angle")
+seq_save_path = os.path.join(base_dir, "seq_data/landmarks_visibility_angle")
 
 full_seq_data = []
 count = 0

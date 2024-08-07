@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os, time
 from setting import actions
-from data_processing.landmark_processing import get_landmarks_visibility
+from data_processing.landmark_processing import get_landmarks
 from dotenv import load_dotenv
 
 # 영상을 넘파이 배열로 변환하는 코드
@@ -13,11 +13,16 @@ base_dir = os.getenv('BASE_DIR')
 # 데이터 저장 경로
 save_path = os.path.join(base_dir, "npy/landmarks")
 save_path_visibility = os.path.join(base_dir, "npy/landmarks_visibility")
-save_path_flip = os.path.join(base_dir, "npy_flip/landmarks")
-save_path_visibility_flip = os.path.join(base_dir, "npy_flip/landmarks_visibility")
+save_path_angle = os.path.join(base_dir, "npy/landmarks_angle")
+save_path_visibility_angle = os.path.join(base_dir, "npy/landmarks_visibility_angle")
+
+flip_save_path = os.path.join(base_dir, "npy_flip/landmarks")
+flip_save_path_visibility = os.path.join(base_dir, "npy_flip/landmarks_visibility")
+flip_save_path_angle = os.path.join(base_dir, "npy_flip/landmarks_angle")
+flip_save_path_visibility_angle = os.path.join(base_dir, "npy_flip/landmarks_visibility_angle")
 
 # flip 여부
-flip = False
+flip = True
 
 # 동영상 파일 설정
 for idx in range(0, 10):
@@ -27,6 +32,8 @@ for idx in range(0, 10):
     
     data = []
     data_visibility = []
+    data_angle = []
+    data_visibility_angle = []
 
     video_num = 0
 
@@ -43,18 +50,22 @@ for idx in range(0, 10):
 
             if flip :
                 frame = cv2.flip(frame, 1)
-            
-            # 랜드마크, 랜드마크 + 가시성정보, 프레임 가져오기
-            # output : tuple[ndarray[Any, dtype[float64]], ndarray[Any, dtype[float64]], Any]
-            d, d_visibility, frame = get_landmarks_visibility(frame)
 
-            # 인덱스 추가
-            d = np.append(d, idx)
-            d_visibility = np.append(d_visibility, idx)
-            
-            # 전체 데이터 배열에 추가
-            data.append(d)
-            data_visibility.append(d_visibility)
+            # output : tuple[ndarray[Any, dtype[float64]], ndarray[Any, dtype[float64]], ndarray[Any, dtype[float64]], ndarray[Any, dtype[float64]], Any]
+            d, d_visibility, d_angle, d_visibility_angle, frame = get_landmarks(frame)
+
+            if d is not None:
+                # 인덱스 추가
+                d = np.append(d, idx)
+                d_visibility = np.append(d_visibility, idx)
+                d_angle = np.append(d_angle, idx)
+                d_visibility_angle = np.append(d_visibility_angle, idx)
+                
+                # 전체 데이터 배열에 추가
+                data.append(d)
+                data_visibility.append(d_visibility)
+                data_angle.append(d_angle)
+                data_visibility_angle.append(d_visibility_angle)
 
             # 화면에 표시
             cv2.imshow('video', frame)
@@ -66,22 +77,26 @@ for idx in range(0, 10):
     # 넘파이 배열로 생성
     data = np.array(data)
     data_visibility = np.array(data_visibility)
+    data_angle = np.array(data_angle)
+    data_visibility_angle = np.array(data_visibility_angle)
 
-    print(data[200])
-    print(data_visibility[200])
+    print(data[100])
     print("data shape: ", action, data.shape)
-    print("visibility data shape: ", action, data_visibility.shape)
     print("영상 개수: ", video_num)
 
     created_time = int(time.time())
 
     # 넘파이 데이터 저장
     if flip :
-        np.save(os.path.join(save_path_flip, f'flip_{action}_{created_time}'), data)
-        np.save(os.path.join(save_path_visibility_flip, f'flip_{action}_{created_time}'), data_visibility)
+        np.save(os.path.join(flip_save_path, f'flip_{action}_{created_time}'), data)
+        np.save(os.path.join(flip_save_path_visibility, f'flip_{action}_{created_time}'), data_visibility)
+        np.save(os.path.join(flip_save_path_angle, f'flip_{action}_{created_time}'), data_angle)
+        np.save(os.path.join(flip_save_path_visibility_angle, f'flip_{action}_{created_time}'), data_visibility_angle)
     else :
         np.save(os.path.join(save_path, f'{action}_{created_time}'), data)
         np.save(os.path.join(save_path_visibility, f'{action}_{created_time}'), data_visibility)
+        np.save(os.path.join(save_path_angle, f'{action}_{created_time}'), data_angle)
+        np.save(os.path.join(save_path_visibility_angle, f'{action}_{created_time}'), data_visibility_angle)
 
     # 사용된 함수, 자원 해제
     cv2.destroyAllWindows()
