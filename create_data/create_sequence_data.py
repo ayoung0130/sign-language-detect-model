@@ -1,6 +1,6 @@
 import numpy as np
 import os, time
-from setting import seq_length
+from setting import seq_length, jumping_window
 from dotenv import load_dotenv
 
 # 넘파이 파일을 concatenate 후 시퀀스 배열로 변환하는 코드
@@ -11,8 +11,8 @@ base_dir = os.getenv('BASE_DIR')
 # "npy" "npy_flip" "npy_shift" "npy_flip_shift"
 # "landmarks" "landmarks_angle" "landmarks_visibility" "landmarks_visibility_angle"
 folder_name = "npy_flip_shift"
-folder_path = os.path.join(base_dir, f"{folder_name}/landmarks_visibility_angle")
-seq_save_path = os.path.join(base_dir, "seq_data/landmarks_visibility_angle")
+folder_path = os.path.join(base_dir, f"{folder_name}/landmarks_angle")
+seq_save_path = os.path.join(base_dir, "seq_data/landmarks_angle")
 
 full_seq_data = []
 count = 0
@@ -23,8 +23,7 @@ for npy_file in os.listdir(folder_path):
     data = np.load(file_path)
 
     # 시퀀스 데이터 생성
-    # Sequence = 30, Jumping = 10
-    data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
+    data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
 
     data = np.array(data)
     print(f"{os.path.basename(file_path)} seq data shape:", data.shape)

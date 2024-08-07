@@ -1,8 +1,8 @@
 import cv2, os, random
 import numpy as np
-from setting import actions, seq_length
+from setting import actions, seq_length, jumping_window
 from keras.models import load_model
-from data_processing.landmark_processing import get_test_landmarks_visibility
+from data_processing.landmark_processing import get_landmarks
 from collections import Counter
 from dotenv import load_dotenv
 
@@ -43,10 +43,11 @@ for video_file in video_files:
             break
 
         # 랜드마크, 프레임 가져오기
-        d, d_visibility, frame = get_test_landmarks_visibility(frame)
-        
-        # 전체 데이터 배열에 추가
-        data.append(d)
+        d, frame = get_landmarks(frame)
+
+        if d is not None:
+            # 전체 데이터 배열에 추가
+            data.append(d)
 
         # 화면에 표시
         cv2.imshow('MediaPipe', frame)
@@ -56,7 +57,7 @@ for video_file in video_files:
     cap.release()
     data = np.array(data)
 
-    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
+    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
     full_seq_data = np.array(full_seq_data)
     print(full_seq_data.shape)
 

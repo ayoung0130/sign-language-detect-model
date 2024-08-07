@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from setting import actions, seq_length, font
+from setting import actions, seq_length, jumping_window, font
 from keras.models import load_model
 from PIL import ImageDraw, Image
 from data_processing.landmark_processing import get_landmarks
@@ -38,16 +38,16 @@ while cap.isOpened():
         break
 
     # 랜드마크, 프레임 가져오기
-    d, d_visibility, d_angle, d_visibility_angle, frame = get_landmarks(frame)
+    d, frame = get_landmarks(frame)
 
     if d is not None:
         # 전체 데이터 배열에 추가
-        data.append(d_angle)
+        data.append(d)
 
     elif len(data) > seq_length:
         data = np.array(data)
 
-        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
+        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
         full_seq_data = np.array(full_seq_data)
 
         # 예측
@@ -75,8 +75,8 @@ while cap.isOpened():
 
         tts(words_to_sentence(predicted_words))
 
-    # 데이터 초기화
-    data = []
+        # 데이터 초기화
+        data = []
 
 cap.release()
 cv2.destroyAllWindows()

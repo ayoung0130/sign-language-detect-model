@@ -9,8 +9,8 @@ base_dir = os.getenv('BASE_DIR')
 
 # "npy" "npy_flip" "npy_shift" "npy_flip_shift"
 # "landmarks" "landmarks_angle" "landmarks_visibility" "landmarks_visibility_angle"
-folder_path = os.path.join(base_dir, 'npy_flip/landmarks_visibility_angle')
-save_path = os.path.join(base_dir, 'npy_flip_shift/landmarks_visibility_angle')
+folder_path = os.path.join(base_dir, 'npy_flip/landmarks_angle')
+save_path = os.path.join(base_dir, 'npy_flip_shift/landmarks_angle')
 
 # 폴더 이름에 "visibility"가 포함되면 col을 4로, 그렇지 않으면 3으로 설정
 col = 4 if "visibility" in folder_path else 3
@@ -18,7 +18,7 @@ col = 4 if "visibility" in folder_path else 3
 # landmarks -> 190(idx 포함), landmarks_visibility -> 253(idx 포함)
 
 def shift_data():
-    scales = [0.9, 1.1]
+    scales = [0.8, 0.9, 1.1, 1.2]
 
     for npy_file in os.listdir(folder_path):
         file_path = os.path.join(folder_path, npy_file)

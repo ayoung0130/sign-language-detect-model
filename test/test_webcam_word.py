@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from setting import actions, seq_length, font
+from setting import actions, seq_length, jumping_window, font
 from keras.models import load_model
 from PIL import ImageDraw, Image
 from data_processing.landmark_processing import get_landmarks
@@ -15,13 +15,12 @@ model = load_model('models/model.h5')
 cap = cv2.VideoCapture(0)
 
 action = "수어 동작을 시작하세요"
+data = []
 
 while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
-
-    data = []
 
     # 글자 표시
     img_pil = Image.fromarray(frame)
@@ -35,16 +34,16 @@ while cap.isOpened():
         break
 
     # 랜드마크, 프레임 가져오기
-    d, d_visibility, d_angle, d_visibility_angle, frame = get_landmarks(frame)
+    d, frame = get_landmarks(frame)
 
     if d is not None:
         # 전체 데이터 배열에 추가
-        data.append(d_angle)
+        data.append(d)
 
-    elif d is None and len(data) > seq_length:
+    elif len(data) > seq_length:
         data = np.array(data)
 
-        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
+        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
         full_seq_data = np.array(full_seq_data)
 
         # 예측
@@ -69,6 +68,8 @@ while cap.isOpened():
 
         else:
             action = "신뢰도가 낮습니다."
+
+        data = []
 
 cap.release()
 cv2.destroyAllWindows()

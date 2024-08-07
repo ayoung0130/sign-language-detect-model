@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import os
-from data_processing.landmark_processing import get_test_landmarks
+from data_processing.landmark_processing import get_landmarks
 from dotenv import load_dotenv
 
 # 테스트 영상을 넘파이 배열로 변환하는 코드
@@ -9,19 +9,13 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"10_words")
+folder_path = os.path.join(base_dir, f"10_words_3")
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "test_npy/landmarks")
-save_path_visibility = os.path.join(base_dir, "test_npy/landmarks_visibility")
-save_path_angle = os.path.join(base_dir, "test_npy/landmarks_angle")
-save_path_visibility_angle = os.path.join(base_dir, "test_npy/landmarks_visibility_angle")
+save_path = os.path.join(base_dir, "test_npy/landmarks_angle")
 
 # flip 여부
 flip = False
-
-# 반환할 joint 값
-return_values = ['joint', 'joint_visibility', 'joint_angle', 'joint_visibility_angle', 'frame']
 
 video_num = 0
 
@@ -33,9 +27,6 @@ for video_file in os.listdir(folder_path):
     cap = cv2.VideoCapture(video_path)
 
     data = []
-    data_visibility = []
-    data_angle = []
-    data_visibility_angle = []
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -45,16 +36,12 @@ for video_file in os.listdir(folder_path):
         if flip :
             frame = cv2.flip(frame, 1)
         
-        # 랜드마크, 랜드마크 + 가시성정보, 프레임 가져오기
-        # output : tuple[ndarray[Any, dtype[float64]], ndarray[Any, dtype[float64]], Any]
-        d, d_visibility, d_angle, d_visibility_angle, frame = get_test_landmarks(frame)
+        # 랜드마크, 프레임 가져오기
+        d, frame = get_landmarks(frame)
 
         if d is not None:
             # 전체 데이터 배열에 추가
             data.append(d)
-            data_visibility.append(d_visibility)
-            data_angle.append(d_angle)
-            data_visibility_angle.append(data_visibility_angle)
 
         # 화면에 표시
         cv2.imshow('test video', frame)
@@ -65,15 +52,10 @@ for video_file in os.listdir(folder_path):
 
     # 넘파이 배열로 생성
     data = np.array(data)
-    data_visibility = np.array(data_visibility)
-    data_angle = np.array(data_angle)
-    data_visibility_angle = np.array(data_visibility_angle)
+    print("data[10]: ", data[10])
     print("data shape: ", data.shape)
 
     # 넘파이 데이터 저장
-    np.save(os.path.join(save_path, f'{base_name}'), data)
-    np.save(os.path.join(save_path_visibility, f'{base_name}'), data_visibility)
-    np.save(os.path.join(save_path_angle, f'{base_name}'), data_angle)
-    np.save(os.path.join(save_path_visibility_angle, f'{base_name}'), data_visibility_angle)
+    np.save(os.path.join(save_path, f'flip_{base_name}'), data)
 
 cv2.destroyAllWindows()
