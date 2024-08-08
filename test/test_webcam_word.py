@@ -9,7 +9,7 @@ from collections import Counter
 # 웹캠으로 모델 예측을 수행하는 코드 (단어 단위)
 
 # 모델 불러오기
-model = load_model('models/model.h5')
+model = load_model('models/model_96.67.h5')
 
 # 웹캠 설정
 cap = cv2.VideoCapture(0)
@@ -27,11 +27,6 @@ while cap.isOpened():
     draw = ImageDraw.Draw(img_pil)
     draw.text((20,20), action, font=font, fill=(0,0,0))
     frame = np.array(img_pil)
-
-    # 화면에 표시
-    cv2.imshow('MediaPipe', frame)
-    if cv2.waitKey(1) == ord('q'):
-        break
 
     # 랜드마크, 프레임 가져오기
     d, frame = get_landmarks(frame)
@@ -70,6 +65,11 @@ while cap.isOpened():
             action = "신뢰도가 낮습니다."
 
         data = []
+    
+    # 화면에 표시
+    cv2.imshow('MediaPipe', frame)
+    if cv2.waitKey(1) == ord('q'):
+        break
 
 cap.release()
 cv2.destroyAllWindows()

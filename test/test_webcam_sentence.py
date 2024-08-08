@@ -32,11 +32,6 @@ while cap.isOpened():
     draw.text((20,20), action, font=font, fill=(0,0,0))
     frame = np.array(img_pil)
 
-    # 화면에 표시
-    cv2.imshow('MediaPipe', frame)
-    if cv2.waitKey(1) == ord('q'):
-        break
-
     # 랜드마크, 프레임 가져오기
     d, frame = get_landmarks(frame)
 
@@ -77,6 +72,11 @@ while cap.isOpened():
 
         # 데이터 초기화
         data = []
+        
+    # 화면에 표시
+    cv2.imshow('MediaPipe', frame)
+    if cv2.waitKey(1) == ord('q'):
+        break
 
 cap.release()
 cv2.destroyAllWindows()
