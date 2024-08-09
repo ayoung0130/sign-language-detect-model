@@ -7,17 +7,17 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-# "npy" "npy_flip" "npy_shift" "npy_flip_shift"
-# "landmarks" "landmarks_angle" "landmarks_visibility" "landmarks_visibility_angle"
-folder_path = os.path.join(base_dir, f'npy_flip/landmarks_angle/0_9')
-save_path = os.path.join(base_dir, f'npy_flip_shift/landmarks_angle/0_9')
+# "npy" "npy_flip"
+original = "npy_flip"
+folder_path = os.path.join(base_dir, f'npy/40_49')              # 0_9 10_19 20_29 30_39 40_49 50_52
+save_path = os.path.join(base_dir, f'{original}_shift/40_49')
 
 # 폴더 이름에 "visibility"가 포함되면 col을 4로, 그렇지 않으면 3으로 설정
 col = 4 if "visibility" in folder_path else 3
 
 def shift_data():
 
-    scales = [0.8, 0.9, 1.1, 1.2]
+    scales = [0.9, 1.1]
 
     for npy_file in os.listdir(folder_path):
         file_path = os.path.join(folder_path, npy_file)

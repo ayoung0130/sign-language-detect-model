@@ -9,13 +9,13 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"10_words_3")
+folder_path = os.path.join(base_dir, f"test_video/3_test")
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "test_npy/landmarks_angle")
+save_path = os.path.join(base_dir, "test_npy")
 
 # flip 여부
-flip = False
+flip = True
 
 video_num = 0
 
@@ -56,6 +56,9 @@ for video_file in os.listdir(folder_path):
     print("data shape: ", data.shape)
 
     # 넘파이 데이터 저장
-    np.save(os.path.join(save_path, f'flip_{base_name}'), data)
+    if flip:
+        np.save(os.path.join(save_path, f'flip_{base_name}'), data)
+    else:
+        np.save(os.path.join(save_path, f'{base_name}'), data)
 
 cv2.destroyAllWindows()
