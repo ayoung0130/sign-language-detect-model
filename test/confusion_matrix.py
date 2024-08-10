@@ -61,6 +61,7 @@ for npy_file in npy_files:
             y_pred.append(final_prediction)  # 예측 클래스
 
 # Confusion Matrix 생성
+# 신뢰도가 낮아도 표시되도록
 cm = confusion_matrix(y_true, y_pred)
 
 # Confusion Matrix 시각화
