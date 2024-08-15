@@ -9,7 +9,7 @@ from collections import Counter
 # 웹캠으로 모델 예측을 수행하는 코드 (단어 단위)
 
 # 모델 불러오기
-model = load_model('models/model_96.67.h5')
+model = load_model('models/model_10words_100.h5')
 
 # 웹캠 설정
 cap = cv2.VideoCapture(0)
@@ -34,6 +34,7 @@ while cap.isOpened():
     if d is not None:
         # 전체 데이터 배열에 추가
         data.append(d)
+        print(d)
 
     elif len(data) > seq_length:
         data = np.array(data)
