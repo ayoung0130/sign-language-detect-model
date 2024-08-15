@@ -11,10 +11,10 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model.h5')
+model = load_model('models/model_98.33.keras')
  
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, '20words')
+npy_data = os.path.join(base_dir, '10_words')
 
 # 동영상 파일 목록 불러오기
 npy_files = os.listdir(npy_data)
@@ -36,8 +36,8 @@ for npy_file in npy_files:
     data = np.load(file_path)
 
     # window 수정 사항 확인
-    if len(data) > 30:
-        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
+    if len(data) > seq_length:
+        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
         full_seq_data = np.array(full_seq_data)
         print(full_seq_data.shape)
 

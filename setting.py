@@ -25,7 +25,7 @@ actions = ['가렵다', '기절', '부러지다', '어제', '어지러움', '열
 
 # 윈도우 사이즈
 seq_length = 15
-jumping_window = 10
+jumping_window = 15
 
 # 폰트 설정
 font = ImageFont.truetype('fonts/NanumGothicBold.ttf', 25)

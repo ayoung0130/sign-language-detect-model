@@ -12,7 +12,7 @@ base_dir = os.getenv('BASE_DIR')
 folder_names = ["npy", "npy_flip", "npy_shift", "npy_flip_shift"]
 
 #"0_9", "10_19", "20_29", "30_39", "40_49"
-idx_list = ["0_9", "10_19"]
+idx_list = ["0_9"]
 
 for folder_name in folder_names:
 
@@ -30,22 +30,20 @@ for folder_name in folder_names:
             file_path = os.path.join(folder_path, npy_file)
             data = np.load(file_path)
 
-            if len(data) > 30:
+            # 시퀀스 데이터 생성
+            data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
+            data = np.array(data)
 
-                # 시퀀스 데이터 생성
-                data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
-                data = np.array(data)
-
-                # 시퀀스 데이터를 full_seq_data에 추가
-                full_seq_data.append(data)
-                
-                count += 1
+            # 시퀀스 데이터를 full_seq_data에 추가
+            full_seq_data.append(data)
+            
+            count += 1
 
     # full_seq_data 리스트에 있는 모든 시퀀스 데이터를 concatenate하여 하나의 배열로 만듦
     full_seq_data = np.concatenate(full_seq_data, axis=0)
 
     created_time = int(time.time())
 
-    np.save(os.path.join(seq_save_path, f'seq_{folder_name}_{created_time}_20words'), full_seq_data)
+    np.save(os.path.join(seq_save_path, f'seq_{folder_name}_{created_time}_15_15'), full_seq_data)
     print("full seq data shape:",  full_seq_data.shape)
     print(f"npy 파일 개수: {count}개")
