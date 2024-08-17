@@ -52,6 +52,15 @@ def get_landmarks(frame):
         joint = np.concatenate([joint_left_hands, joint_right_hands, joint_pose])
         joint_angle = np.concatenate([joint.flatten(), angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)])
 
+        # 왼손, 오른손, 포즈의 0번 인덱스 좌표 출력
+        print(f"Left Hand [0] -> x: {joint_left_hands[0][0]}, y: {joint_left_hands[0][1]}, z: {joint_left_hands[0][2]}")
+        print(f"Right Hand [0] -> x: {joint_right_hands[0][0]}, y: {joint_right_hands[0][1]}, z: {joint_right_hands[0][2]}")
+        print(f"Pose [0] -> x: {joint_pose[0][0]}, y: {joint_pose[0][1]}, z: {joint_pose[0][2]}")
+
+        print(f"Left Hand Angle: {angle_hands(joint_left_hands)}")
+        print(f"Right Hand Angle: {angle_hands(joint_right_hands)}")
+        print(f"Pose Angle: {angle_pose(joint_pose)}")
+
         return joint_angle.flatten(), frame
     
     return None, frame

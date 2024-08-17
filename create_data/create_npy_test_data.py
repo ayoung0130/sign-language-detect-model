@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import os
-from data_processing.landmark_processing import get_landmarks
+from data_processing.landmark_processing_xy import get_landmarks
 from dotenv import load_dotenv
 
 # 테스트 영상을 넘파이 배열로 변환하는 코드
@@ -9,13 +9,13 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"test_video/3_test")
+folder_path = os.path.join(base_dir, f"")
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "test_npy")
+save_path = os.path.join(base_dir, "10_words_xy")
 
 # flip 여부
-flip = True
+flip = False
 
 video_num = 0
 

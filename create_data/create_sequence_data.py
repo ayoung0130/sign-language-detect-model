@@ -12,7 +12,7 @@ base_dir = os.getenv('BASE_DIR')
 folder_names = ["npy", "npy_flip", "npy_shift", "npy_flip_shift"]
 
 #"0_9", "10_19", "20_29", "30_39", "40_49"
-idx_list = ["0_9"]
+idx_list = ["0_9_xy"]
 
 for folder_name in folder_names:
 

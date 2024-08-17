@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os, time
 from setting import actions
-from data_processing.landmark_processing import get_landmarks
+from data_processing.landmark_processing_xy import get_landmarks
 from dotenv import load_dotenv
 
 # 영상을 넘파이 배열로 변환하는 코드
@@ -11,7 +11,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, f"npy/0_9")
+save_path = os.path.join(base_dir, f"npy/0_9_xy")
 
 # flip 여부
 flip = False
@@ -60,6 +60,7 @@ for idx in range(0, 10):
     # 넘파이 배열로 생성
     data = np.array(data)
     print("data shape: ", action, data.shape)
+    print(data[50])
 
     # 넘파이 데이터 저장
     created_time = int(time.time())
