@@ -14,7 +14,7 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model.keras')
  
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, '10_words_xy')
+npy_data = os.path.join(base_dir, 'test_npy/0_9')
 
 # 동영상 파일 목록 불러오기
 npy_files = os.listdir(npy_data)
@@ -29,13 +29,13 @@ flip_correct_count = 0
 action_correct_counts = {action: 0 for action in actions}
 
 for npy_file in npy_files:
-    # 동영상 불러오기
+    # 파일 불러오기
     file_path = os.path.join(npy_data, npy_file)
     base_name = os.path.basename(file_path)
 
     data = np.load(file_path)
 
-    # window 수정 사항 확인
+    # 프레임 길이가 Slicing Seq보다 길다면
     if len(data) > seq_length:
         full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
         full_seq_data = np.array(full_seq_data)

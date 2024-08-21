@@ -9,7 +9,7 @@ from collections import Counter
 # 웹캠으로 모델 예측을 수행하는 코드 (단어 단위)
 
 # 모델 불러오기
-model = load_model('models/model_98.33.keras')
+model = load_model('models/model.keras')
 
 # 웹캠 설정
 cap = cv2.VideoCapture(0)
@@ -21,6 +21,10 @@ while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
+
+    # 이미지의 width와 height를 출력
+    height, width, _ = frame.shape
+    print(f"Image width: {width}, Image height: {height}")
 
     # 글자 표시
     img_pil = Image.fromarray(frame)

@@ -1,10 +1,9 @@
 import numpy as np
-import cv2
+import cv2, math
 from setting import mp_hands, mp_pose, hands, pose, pose_landmark_indices, mp_drawing
 
-# 미디어파이프 hands, pose 모델의 랜드마크를 처리하는 코드
-# 랜드마크 추출
-# Input: 동영상 파일 프레임 / Output: 랜드마크(가시성정보), 프레임
+# 미디어파이프 hands, pose 모델의 랜드마크를 추출 및 처리하는 코드
+# Input: 동영상 파일 프레임 / Output: 랜드마크(x, y, z), 프레임
 
 def get_landmarks(frame):
 
@@ -14,54 +13,36 @@ def get_landmarks(frame):
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
     # 관절 정보 저장할 넘파이 배열 초기화
-    joint_left_hands = np.zeros((21, 3))
-    joint_right_hands = np.zeros((21, 3))
-    joint_pose = np.zeros((21, 3))
+    joint_left_hands = np.zeros((21, 3), dtype=np.float32)
+    joint_right_hands = np.zeros((21, 3), dtype=np.float32)
+    joint_pose = np.zeros((21, 3), dtype=np.float32)
 
-    # joint_left_hands = np.zeros((21, 4))
-    # joint_right_hands = np.zeros((21, 4))
-    # joint_pose = np.zeros((21, 4))
-
-    # 손 검출시
-    if results_hands.multi_hand_landmarks is not None:
+    # 손과 포즈 동시 검출시
+    if results_hands.multi_hand_landmarks is not None and results_pose.pose_landmarks is not None:
         for res, handedness in zip(results_hands.multi_hand_landmarks, results_hands.multi_handedness):
             # 손 -> 모든 관절에 대해 반복. 한 프레임에 왼손, 오른손 데이터가 0번부터 20번까지 들어감
             for j, lm in enumerate(res.landmark):
                 if handedness.classification[0].label == 'Left':
                     joint_left_hands[j] = [lm.x, lm.y, lm.z]
-                    # joint_left_hands[j] = [lm.x, lm.y, lm.z, set_visibility(lm.x, lm.y)]
-                else:
+                if handedness.classification[0].label == 'Right':
                     joint_right_hands[j] = [lm.x, lm.y, lm.z]
-                    # joint_right_hands[j] = [lm.x, lm.y, lm.z, set_visibility(lm.x, lm.y)]
 
             # 손 랜드마크 그리기
             color = (0, 255, 0) if handedness.classification[0].label == 'Left' else (255, 0, 0)
             mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS, landmark_drawing_spec=mp_drawing.DrawingSpec(color=color))
 
-        # 포즈 검출시
-        if results_pose.pose_landmarks is not None:
-            # 포즈 -> 지정한 관절에 대해서만 반복
-            for j, i in enumerate(pose_landmark_indices):
-                plm = results_pose.pose_landmarks.landmark[i]
-                joint_pose[j] = [plm.x, plm.y, plm.z]
-                # joint_pose[j] = [plm.x, plm.y, plm.z, plm.visibility]
+        # 포즈 -> 지정한 관절에 대해서만 반복
+        for j, i in enumerate(pose_landmark_indices):
+            plm = results_pose.pose_landmarks.landmark[i]
+            joint_pose[j] = [plm.x, plm.y, plm.z]
 
-            # 포즈 랜드마크 그리기
-            mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+        # 포즈 랜드마크 그리기
+        mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
-        joint = np.concatenate([joint_left_hands, joint_right_hands, joint_pose])
-        joint_angle = np.concatenate([joint.flatten(), angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)])
+        joint = np.concatenate([joint_left_hands.flatten(), joint_right_hands.flatten(), joint_pose.flatten(), 
+                                angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)])
 
-        # 왼손, 오른손, 포즈의 0번 인덱스 좌표 출력
-        print(f"Left Hand [0] -> x: {joint_left_hands[0][0]}, y: {joint_left_hands[0][1]}, z: {joint_left_hands[0][2]}")
-        print(f"Right Hand [0] -> x: {joint_right_hands[0][0]}, y: {joint_right_hands[0][1]}, z: {joint_right_hands[0][2]}")
-        print(f"Pose [0] -> x: {joint_pose[0][0]}, y: {joint_pose[0][1]}, z: {joint_pose[0][2]}")
-
-        print(f"Left Hand Angle: {angle_hands(joint_left_hands)}")
-        print(f"Right Hand Angle: {angle_hands(joint_right_hands)}")
-        print(f"Pose Angle: {angle_pose(joint_pose)}")
-
-        return joint_angle.flatten(), frame
+        return joint.flatten(), frame
     
     return None, frame
 
@@ -75,7 +56,7 @@ def angle_hands(joint_hands):
     norm_v = np.linalg.norm(v, axis=1)
 
     if np.all(norm_v == 0):
-        angle = np.zeros([15,])
+        angle = np.zeros([15,], dtype=np.float32)
     else: 
         v = v / norm_v[:, np.newaxis]
         # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
@@ -96,7 +77,7 @@ def angle_pose(joint_pose):
     # 벡터 정규화
     norm_v = np.linalg.norm(v, axis=1)
     if np.all(norm_v == 0):
-        angle = np.zeros([15,])
+        angle = np.zeros([15,], dtype=np.float32)
     else: 
         v = v / norm_v[:, np.newaxis]
         # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
@@ -106,16 +87,3 @@ def angle_pose(joint_pose):
         angle = np.arccos(dot_product) # [15,]
 
     return angle.flatten()
-
-def set_visibility(x, y, epsilon=1e-6):
-    
-    # 모든 좌표가 0인 경우
-    if x <= epsilon and y <= epsilon:
-        return 0
-    
-    # 한 좌표가 0인 경우
-    if x <= epsilon or y <= epsilon:
-        return 0.5
-    
-    # 전부 0이 아닌 경우
-    return 1

@@ -18,7 +18,7 @@ input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
 # 파일 경로 설정
-npy_data = os.path.join(base_dir, '10_words')
+npy_data = os.path.join(base_dir, '10_words_xy')
 
 # 넘파이 파일 목록 불러오기
 npy_files = os.listdir(npy_data)

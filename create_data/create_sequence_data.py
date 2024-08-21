@@ -8,11 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-# "npy" "npy_flip" "npy_shift" "npy_flip_shift"
 folder_names = ["npy", "npy_flip", "npy_shift", "npy_flip_shift"]
+idx_list = ["0_9"]  #"0_9", "10_19", "20_29", "30_39", "40_49"
 
-#"0_9", "10_19", "20_29", "30_39", "40_49"
-idx_list = ["0_9_xy"]
+seq_save_path = os.path.join(base_dir, "seq_data")
 
 for folder_name in folder_names:
 
@@ -20,10 +19,7 @@ for folder_name in folder_names:
     count = 0
 
     for idx in idx_list:
-
         folder_path = os.path.join(base_dir, f"{folder_name}/{idx}")
-
-        seq_save_path = os.path.join(base_dir, "seq_data")
 
         for npy_file in os.listdir(folder_path):
             # 파일 불러오기
