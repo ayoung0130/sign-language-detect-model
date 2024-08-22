@@ -11,8 +11,8 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, f"npy/0_9")
-flip_save_path = os.path.join(base_dir, f"npy_flip/0_9")
+save_path = os.path.join(base_dir, f"npy")
+flip_save_path = os.path.join(base_dir, f"npy_flip")
 
 def process_video(video_path, flip=False):
     cap = cv2.VideoCapture(video_path)
@@ -66,15 +66,16 @@ def process_action_videos(action, folder_path, idx, flip=False):
         save_data(action, data, flip)
 
 # Original and Flip processing
-for idx in range(10):
+for idx in range(10, 50):
     action = actions[idx]
     folder_path = os.path.join(base_dir, f"video/resized_video_{idx}")
 
     # Process original videos
     process_action_videos(action, folder_path, idx, flip=False)
 
-    # Process flipped videos
-    process_action_videos(action, folder_path, idx, flip=True)
+    if "오른쪽" not in action or "왼쪽" not in action:
+        # Process flipped videos
+        process_action_videos(action, folder_path, idx, flip=True)
 
 # 사용된 함수, 자원 해제
 cv2.destroyAllWindows()

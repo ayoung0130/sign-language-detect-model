@@ -24,7 +24,7 @@ def get_landmarks(frame):
             for j, lm in enumerate(res.landmark):
                 if handedness.classification[0].label == 'Left':
                     joint_left_hands[j] = [lm.x, lm.y, lm.z]
-                if handedness.classification[0].label == 'Right':
+                else:
                     joint_right_hands[j] = [lm.x, lm.y, lm.z]
 
             # 손 랜드마크 그리기
