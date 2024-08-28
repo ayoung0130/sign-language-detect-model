@@ -9,8 +9,8 @@ base_dir = os.getenv('BASE_DIR')
 
 # "npy" "npy_flip"
 original = "npy_flip"
-folder_path = os.path.join(base_dir, f'npy/0_9')              # 0_9 10_19 20_29 30_39 40_49 50_52
-save_path = os.path.join(base_dir, f'{original}_shift/0_9')
+folder_path = os.path.join(base_dir, f'{original}/0_9_0828')              # 0_9 10_19 20_29 30_39 40_49 50_52
+save_path = os.path.join(base_dir, f'{original}_shift/0_9_0828')
 
 def shift_data():
     scales = [0.8, 1.2]
@@ -25,12 +25,12 @@ def shift_data():
             print(f"{base_name} {scale} shift 전: ", data[100, 0:5])
 
             # only landmarks
-            # 0번 인덱스부터 186번 인덱스까지
-            for x in range(0, 187, 3):
+            # 0번 인덱스부터 168번 인덱스까지
+            for x in range(0, 169, 3):
                 data[:, x] = data[:, x] * scale # (x 좌표값) * (이동시킬 퍼센테이지)
             
-            # 1번 인덱스부터 187번 인덱스까지
-            for y in range(1, 188, 3):
+            # 1번 인덱스부터 169번 인덱스까지
+            for y in range(1, 170, 3):
                 data[:, y] = data[:, y] * scale # (y 좌표값) * (이동시킬 퍼센테이지)
 
 

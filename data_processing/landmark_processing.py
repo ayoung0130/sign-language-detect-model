@@ -1,5 +1,5 @@
 import numpy as np
-import cv2, math
+import cv2
 from setting import mp_hands, mp_pose, hands, pose, pose_landmark_indices, mp_drawing
 
 # 미디어파이프 hands, pose 모델의 랜드마크를 추출 및 처리하는 코드
@@ -15,7 +15,7 @@ def get_landmarks(frame):
     # 관절 정보 저장할 넘파이 배열 초기화
     joint_left_hands = np.zeros((21, 3), dtype=np.float32)
     joint_right_hands = np.zeros((21, 3), dtype=np.float32)
-    joint_pose = np.zeros((21, 3), dtype=np.float32)
+    joint_pose = np.zeros((15, 3), dtype=np.float32)
 
     # 손과 포즈 동시 검출시
     if results_hands.multi_hand_landmarks is not None and results_pose.pose_landmarks is not None:
@@ -42,7 +42,7 @@ def get_landmarks(frame):
         joint = np.concatenate([joint_left_hands.flatten(), joint_right_hands.flatten(), joint_pose.flatten(), 
                                 angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)])
 
-        return joint.flatten(), frame
+        return joint, frame
     
     return None, frame
 
@@ -50,40 +50,45 @@ def angle_hands(joint_hands):
     # 관절 간의 각도 계산
     v1 = joint_hands[[0,1,2,3,0,5,6,7,0,9,10,11,0,13,14,15,0,17,18,19], :3] # Parent joint  각 관절은 [x, y, z] 좌표로 표현되므로 :3
     v2 = joint_hands[[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20], :3] # Child joint
-    v = v2 - v1 # [20, 3]. 20개 행과 3개 열
+    v = v2 - v1 # (20, 3). 20개 행과 3개 열
 
+    # 벡터 크기 계산
+    norm_v = np.linalg.norm(v, axis=1)  # (20,) sqrt(x^2+y^2+z^2) 즉 벡터의 크기(길이)
+
+    # 벡터 크기가 0인 값을 위해 마스크 생성
+    zero_norm_mask = norm_v == 0
+    
     # 벡터 정규화
-    norm_v = np.linalg.norm(v, axis=1)
+    # newaxis -> norm_v 배열을 (20,1)로 바꿔 v와 차원 맞춰줌
+    v[~zero_norm_mask] = v[~zero_norm_mask] / norm_v[~zero_norm_mask][:, np.newaxis]
+    v[zero_norm_mask] = 0  # 크기가 0인 벡터를 명시적으로 0으로 설정
 
-    if np.all(norm_v == 0):
-        angle = np.zeros([15,], dtype=np.float32)
-    else: 
-        v = v / norm_v[:, np.newaxis]
-        # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
-        dot_product = np.clip(np.einsum('nt,nt->n',
-            v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
-            v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:]), -1.0, 1.0)
-        angle = np.arccos(dot_product) # [15,]
+    # 도트 곱 계산
+    dot_product = np.clip(np.einsum('nt,nt->n',
+        v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
+        v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:]), -1.0, 1.0)
+    
+    # 각도 계산
+    angle = np.arccos(dot_product) # (15,)
 
     return angle.flatten()
 
 def angle_pose(joint_pose):
-    v1 = joint_pose[[0, 2, 0, 1, 0, 0, 7, 8, 8, 8, 10, 12, 12, 12, 7, 7, 9, 11, 11, 11], :3]
-    v2 = joint_pose[[2, 4, 1, 3, 5, 6, 8, 7, 10, 20, 12, 14, 16, 18, 9, 19, 11, 13, 15, 17], :3]
-    # 0, 2, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
-    # 0, 1, 2, 3, 4, 5, 6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
-    v = v2 - v1
+    v1 = joint_pose[[0,1, 1,3,5,5, 5,0,2, 2,4,6, 6, 6], :3] # 0, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
+    v2 = joint_pose[[1,3,13,5,7,9,11,2,4,14,6,8,10,12], :3] # 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14
+    v = v2 - v1 # (14, 3)
 
-    # 벡터 정규화
     norm_v = np.linalg.norm(v, axis=1)
-    if np.all(norm_v == 0):
-        angle = np.zeros([15,], dtype=np.float32)
-    else: 
-        v = v / norm_v[:, np.newaxis]
-        # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
-        dot_product = np.clip(np.einsum('nt,nt->n',
-            v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
-            v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:]), -1.0, 1.0)
-        angle = np.arccos(dot_product) # [15,]
+
+    zero_norm_mask = norm_v == 0
+
+    v[~zero_norm_mask] = v[~zero_norm_mask] / norm_v[~zero_norm_mask][:, np.newaxis]
+    v[zero_norm_mask] = 0
+
+    dot_product = np.clip(np.einsum('nt,nt->n',
+        v[[0,1,2,3,4,5,7,8, 9,10,11,12],:], 
+        v[[1,2,3,4,5,6,8,9,10,11,12,13],:]), -1.0, 1.0)
+    
+    angle = np.arccos(dot_product) # (12,)
 
     return angle.flatten()
