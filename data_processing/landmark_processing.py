@@ -58,8 +58,7 @@ def angle_hands(joint_hands):
     # 벡터 크기가 0인 값을 위해 마스크 생성
     zero_norm_mask = norm_v == 0
     
-    # 벡터 정규화
-    # newaxis -> norm_v 배열을 (20,1)로 바꿔 v와 차원 맞춰줌
+    # 벡터 정규화   newaxis -> norm_v 배열을 (20,1)로 바꿔 v와 차원 맞춰줌
     v[~zero_norm_mask] = v[~zero_norm_mask] / norm_v[~zero_norm_mask][:, np.newaxis]
     v[zero_norm_mask] = 0  # 크기가 0인 벡터를 명시적으로 0으로 설정
 
@@ -86,7 +85,7 @@ def angle_pose(joint_pose):
     v[zero_norm_mask] = 0
 
     dot_product = np.clip(np.einsum('nt,nt->n',
-        v[[0,1,2,3,4,5,7,8, 9,10,11,12],:], 
+        v[[0,0,1,3,3,3,7,7, 8,10,10,10],:], 
         v[[1,2,3,4,5,6,8,9,10,11,12,13],:]), -1.0, 1.0)
     
     angle = np.arccos(dot_product) # (12,)

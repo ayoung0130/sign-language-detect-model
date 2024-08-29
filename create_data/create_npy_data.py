@@ -11,11 +11,11 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, f"npy/0_9_0828")
-flip_save_path = os.path.join(base_dir, f"npy_flip/0_9_0828")
+save_path = os.path.join(base_dir, f"npy/0_9_0829")
+flip_save_path = os.path.join(base_dir, f"npy_flip/0_9_0829")
 
 # flip 여부
-flip = True
+flip = False
 
 for idx in range(0, 10):
     action = actions[idx]
