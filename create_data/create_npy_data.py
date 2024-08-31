@@ -15,7 +15,7 @@ save_path = os.path.join(base_dir, f"npy/0_9_0829")
 flip_save_path = os.path.join(base_dir, f"npy_flip/0_9_0829")
 
 # flip 여부
-flip = False
+flip = True
 
 for idx in range(0, 10):
     action = actions[idx]

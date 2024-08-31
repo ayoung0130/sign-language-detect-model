@@ -9,13 +9,13 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"test_video_10words/3")
+folder_path = os.path.join(base_dir, f"test_video_10words/1_2")
 
 # 데이터 저장 경로
 save_path = os.path.join(base_dir, "test_npy")
 
 # flip 여부
-flip = False
+flip = True
 
 video_num = 0
 
