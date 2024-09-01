@@ -9,13 +9,13 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"test_video_10words/1_2")
+folder_path = os.path.join(base_dir, f"test_video_10words/3")
 
 # 데이터 저장 경로
 save_path = os.path.join(base_dir, "test_npy")
 
 # flip 여부
-flip = True
+flip = False
 
 video_num = 0
 
@@ -57,8 +57,8 @@ for video_file in os.listdir(folder_path):
 
     # 넘파이 데이터 저장
     if flip:
-        np.save(os.path.join(save_path, f'flip_{base_name}'), data)
-    else:
         np.save(os.path.join(save_path, f'{base_name}'), data)
+    else:
+        np.save(os.path.join(save_path, f'flip_{base_name}'), data)
 
 cv2.destroyAllWindows()

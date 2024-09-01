@@ -12,13 +12,14 @@ def get_landmarks(frame):
     results_pose = pose.process(frame)      # 포즈 랜드마크 검출
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
-    # 관절 정보 저장할 넘파이 배열 초기화
-    joint_left_hands = np.zeros((21, 3), dtype=np.float32)
-    joint_right_hands = np.zeros((21, 3), dtype=np.float32)
-    joint_pose = np.zeros((15, 3), dtype=np.float32)
-
     # 손과 포즈 동시 검출시
     if results_hands.multi_hand_landmarks is not None and results_pose.pose_landmarks is not None:
+        
+        # 관절 정보 저장할 넘파이 배열 초기화
+        joint_left_hands = np.zeros((21, 3))
+        joint_right_hands = np.zeros((21, 3))
+        joint_pose = np.zeros((15, 3))
+
         for res, handedness in zip(results_hands.multi_hand_landmarks, results_hands.multi_handedness):
             # 손 -> 모든 관절에 대해 반복. 한 프레임에 왼손, 오른손 데이터가 0번부터 20번까지 들어감
             for j, lm in enumerate(res.landmark):
@@ -39,8 +40,7 @@ def get_landmarks(frame):
         # 포즈 랜드마크 그리기
         mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
-        joint = np.concatenate([joint_left_hands.flatten(), joint_right_hands.flatten(), joint_pose.flatten(), 
-                                angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)])
+        joint = np.concatenate([joint_left_hands.flatten(), joint_right_hands.flatten(), joint_pose.flatten()])
 
         return joint, frame
     
