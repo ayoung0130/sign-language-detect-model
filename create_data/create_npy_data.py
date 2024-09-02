@@ -14,52 +14,53 @@ base_dir = os.getenv('BASE_DIR')
 save_path = os.path.join(base_dir, f"npy/0_9")
 flip_save_path = os.path.join(base_dir, f"npy_flip/0_9")
 
-# flip 여부
-flip = False
+# flip 여부를 결정하는 리스트
+flip_options = [False, True]
 
-for idx in range(0, 10):
-    action = actions[idx]
-    folder_path = os.path.join(base_dir, f"video/resized_video_{idx}")
-    video_num = 0
+for flip in flip_options:
+    for idx in range(0, 10):
+        action = actions[idx]
+        folder_path = os.path.join(base_dir, f"video/resized_video_{idx}")
+        video_num = 0
 
-    data = []
+        data = []
 
-    for video_file in os.listdir(folder_path):
-        video_num += 1
-        video_path = os.path.join(folder_path, video_file)
-        cap = cv2.VideoCapture(video_path)
-        
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
+        for video_file in os.listdir(folder_path):
+            video_num += 1
+            video_path = os.path.join(folder_path, video_file)
+            cap = cv2.VideoCapture(video_path)
+            
+            while cap.isOpened():
+                ret, frame = cap.read()
+                if not ret:
+                    break
 
-            if flip:
-                frame = cv2.flip(frame, 1)
+                if flip:
+                    frame = cv2.flip(frame, 1)
 
-            # 랜드마크, 프레임 가져오기
-            d, frame = get_landmarks(frame)
+                # 랜드마크, 프레임 가져오기
+                d, frame = get_landmarks(frame)
 
-            if d is not None:
-                d = np.append(d, idx)
-                data.append(d)
+                if d is not None:
+                    d = np.append(d, idx)
+                    data.append(d)
 
-            cv2.imshow('video', frame)
-            if cv2.waitKey(1) == ord('q'):
-                break
+                cv2.imshow('video', frame)
+                if cv2.waitKey(1) == ord('q'):
+                    break
 
-    data = np.array(data)
-    print(f"data[100]: {data[100]}")
-    print(f"data shape: {action}, {data.shape}")
-    print(f"영상 개수: {video_num}")
+        data = np.array(data)
+        print(f"data[100]: {data[100]}")
+        print(f"data shape: {action}, {data.shape}")
+        print(f"영상 개수: {video_num}")
 
-    # 데이터 저장
-    created_time = int(time.time())
+        # 데이터 저장
+        created_time = int(time.time())
 
-    if flip:
-        np.save(os.path.join(flip_save_path, f'flip_{action}_{created_time}'), data)
-    else :
-        np.save(os.path.join(save_path, f'{action}_{created_time}'), data)
+        if flip:
+            np.save(os.path.join(flip_save_path, f'flip_{action}_{created_time}'), data)
+        else :
+            np.save(os.path.join(save_path, f'{action}_{created_time}'), data)
 
 # 사용된 함수, 자원 해제
 cv2.destroyAllWindows()

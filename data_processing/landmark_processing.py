@@ -18,7 +18,7 @@ def get_landmarks(frame):
         # 관절 정보 저장할 넘파이 배열 초기화
         joint_left_hands = np.zeros((21, 3), dtype=np.float32)
         joint_right_hands = np.zeros((21, 3), dtype=np.float32)
-        joint_pose = np.zeros((15, 3), dtype=np.float32)
+        joint_pose = np.zeros((21, 3), dtype=np.float32)
 
         for res, handedness in zip(results_hands.multi_hand_landmarks, results_hands.multi_handedness):
             # 손 -> 모든 관절에 대해 반복. 한 프레임에 왼손, 오른손 데이터가 0번부터 20번까지 들어감
@@ -64,16 +64,16 @@ def angle_hands(joint_hands):
         dot_product = np.clip(np.einsum('nt,nt->n',
             v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
             v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:]), -1.0, 1.0)
-        
-    # 각도 계산
-    angle = np.arccos(dot_product) # (15,)
+        angle = np.arccos(dot_product) # (15,)
 
     return angle.flatten()
 
 def angle_pose(joint_pose):
-    v1 = joint_pose[[0,1, 1,3,5,5, 5,0,2, 2,4,6, 6, 6], :3] # 0, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
-    v2 = joint_pose[[1,3,13,5,7,9,11,2,4,14,6,8,10,12], :3] # 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14
-    v = v2 - v1 # (14, 3)
+    v1 = joint_pose[[0,1,0,5,7,9,11,11,11,0,2,0,6,8,10,12,12,12,7,19], :3]
+    v2 = joint_pose[[1,3,5,7,9,11,13,15,17,2,4,6,8,10,12,14,16,18,8,7], :3]
+    # 0, 2, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
+    # 0, 1, 2, 3, 4, 5, 6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+    v = v2 - v1 # (20, 3)
 
     norm_v = np.linalg.norm(v, axis=1)
 
@@ -82,9 +82,8 @@ def angle_pose(joint_pose):
     else: 
         v = v / norm_v[:, np.newaxis]
         dot_product = np.clip(np.einsum('nt,nt->n',
-            v[[0,0,1,3,3,3,7,7, 8,10,10,10],:], 
-            v[[1,2,3,4,5,6,8,9,10,11,12,13],:]), -1.0, 1.0)
-    
-    angle = np.arccos(dot_product) # (12,)
+            v[[0,2,3,4,5,5,5,9,11,12,13,14,14,14,18],:], 
+            v[[1,3,4,5,6,7,8,10,12,13,14,15,16,17,19],:]), -1.0, 1.0)
+        angle = np.arccos(dot_product) # (15,)
 
     return angle.flatten()
