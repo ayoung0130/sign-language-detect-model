@@ -40,6 +40,6 @@ for folder_name in folder_names:
 
     created_time = int(time.time())
 
-    np.save(os.path.join(seq_save_path, f'seq_{folder_name}_{created_time}_30_10'), full_seq_data)
+    np.save(os.path.join(seq_save_path, f'seq_{folder_name}_{created_time}_{seq_length}_{jumping_window}'), full_seq_data)
     print("full seq data shape:",  full_seq_data.shape)
     print(f"npy 파일 개수: {count}개")
