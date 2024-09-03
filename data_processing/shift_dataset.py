@@ -22,7 +22,7 @@ def shift_data():
         for scale in scales:
             data = np.load(file_path)
 
-            print(f"{base_name} {scale} shift 전: ", data[100, 0:5])
+            print(f"{base_name} {scale} shift 전: ", data[200, 0:5])
 
             # only landmarks
             # 0번 인덱스부터 186번 인덱스까지
@@ -33,7 +33,7 @@ def shift_data():
             for y in range(1, 188, 3):
                 data[:, y] = data[:, y] * scale # (y 좌표값) * (이동시킬 퍼센테이지)
 
-            print(f"{base_name} {scale} shift 후: ", data[100, 0:5])
+            print(f"{base_name} {scale} shift 후: ", data[200, 0:5])
             print("")
 
             # 수정된 데이터를 저장
