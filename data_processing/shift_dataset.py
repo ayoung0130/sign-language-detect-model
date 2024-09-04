@@ -8,12 +8,12 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # "npy" "npy_flip"
-original = "npy"
+original = "npy_flip"
 folder_path = os.path.join(base_dir, f'{original}/0_9')              # 0_9 10_19 20_29 30_39 40_49 50_52
 save_path = os.path.join(base_dir, f'{original}_shift/0_9')
 
 def shift_data():
-    scales = [0.9, 1.1]
+    scales = [0.8, 1.2]
 
     for npy_file in os.listdir(folder_path):
         file_path = os.path.join(folder_path, npy_file)

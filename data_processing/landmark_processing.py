@@ -12,13 +12,12 @@ def get_landmarks(frame):
     results_pose = pose.process(frame)      # 포즈 랜드마크 검출
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
-    # 손과 포즈 동시 검출시
-    if results_hands.multi_hand_landmarks is not None and results_pose.pose_landmarks is not None:
-        
+    # 손 검출시
+    if results_hands.multi_hand_landmarks is not None:
         # 관절 정보 저장할 넘파이 배열 초기화
-        joint_left_hands = np.zeros((21, 3), dtype=np.float32)
-        joint_right_hands = np.zeros((21, 3), dtype=np.float32)
-        joint_pose = np.zeros((21, 3), dtype=np.float32)
+        joint_left_hands = np.zeros((21, 3))
+        joint_right_hands = np.zeros((21, 3))
+        joint_pose = np.zeros((21, 3))
 
         for res, handedness in zip(results_hands.multi_hand_landmarks, results_hands.multi_handedness):
             # 손 -> 모든 관절에 대해 반복. 한 프레임에 왼손, 오른손 데이터가 0번부터 20번까지 들어감
@@ -32,13 +31,14 @@ def get_landmarks(frame):
             color = (0, 255, 0) if handedness.classification[0].label == 'Left' else (255, 0, 0)
             mp_drawing.draw_landmarks(frame, res, mp_hands.HAND_CONNECTIONS, landmark_drawing_spec=mp_drawing.DrawingSpec(color=color))
 
-        # 포즈 -> 지정한 관절에 대해서만 반복
-        for j, i in enumerate(pose_landmark_indices):
-            plm = results_pose.pose_landmarks.landmark[i]
-            joint_pose[j] = [plm.x, plm.y, plm.z]
+        if results_pose.pose_landmarks is not None:
+            # 포즈 -> 지정한 관절에 대해서만 반복
+            for j, i in enumerate(pose_landmark_indices):
+                plm = results_pose.pose_landmarks.landmark[i]
+                joint_pose[j] = [plm.x, plm.y, plm.z]
 
-        # 포즈 랜드마크 그리기
-        mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+            # 포즈 랜드마크 그리기
+            mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
         joint = np.concatenate([joint_left_hands.flatten(), joint_right_hands.flatten(), joint_pose.flatten(),
                                 angle_hands(joint_left_hands), angle_hands(joint_right_hands), angle_pose(joint_pose)])
@@ -57,7 +57,7 @@ def angle_hands(joint_hands):
     norm_v = np.linalg.norm(v, axis=1)  # (20,) sqrt(x^2+y^2+z^2) 즉 벡터의 크기(길이)
 
     if np.all(norm_v == 0):
-        angle = np.zeros([15,], dtype=np.float32)
+        angle = np.zeros([15,])
     else: 
         v = v / norm_v[:, np.newaxis]
         # 각도 계산 (arccos를 이용하여 도트 곱의 역순 취함)
@@ -78,7 +78,7 @@ def angle_pose(joint_pose):
     norm_v = np.linalg.norm(v, axis=1)
 
     if np.all(norm_v == 0):
-        angle = np.zeros([15,], dtype=np.float32)
+        angle = np.zeros([15,])
     else: 
         v = v / norm_v[:, np.newaxis]
         dot_product = np.clip(np.einsum('nt,nt->n',

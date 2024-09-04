@@ -44,7 +44,7 @@ while cap.isOpened():
         # 예측
         y_pred = model.predict(full_seq_data)
 
-        # 각 프레임의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
+        # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
         predicted_classes = []
         for pred in y_pred:
             max_prob = np.max(pred)

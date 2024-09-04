@@ -14,7 +14,7 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model.keras')
  
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, 'test_npy')
+npy_data = os.path.join(base_dir, 'test_10words')
 
 # 동영상 파일 목록 불러오기
 npy_files = os.listdir(npy_data)
@@ -44,7 +44,7 @@ for npy_file in npy_files:
         # 예측
         y_pred = model.predict(full_seq_data)
 
-        # 각 프레임의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
+        # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
         predicted_classes = []
         for pred in y_pred:
             predicted_class = np.argmax(pred)
