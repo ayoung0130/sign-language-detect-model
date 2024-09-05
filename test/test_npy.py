@@ -47,8 +47,10 @@ for npy_file in npy_files:
         # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
         predicted_classes = []
         for pred in y_pred:
-            predicted_class = np.argmax(pred)
-            predicted_classes.append(predicted_class)
+            max_prob = np.max(pred)
+            if max_prob >= 0.90:
+                predicted_class = np.argmax(pred)
+                predicted_classes.append(predicted_class)
 
         print(predicted_classes)
 
