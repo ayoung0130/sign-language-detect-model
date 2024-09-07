@@ -14,7 +14,7 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model.keras')
  
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, 'test_10words')
+npy_data = os.path.join(base_dir, 'test_30words')
 
 # 동영상 파일 목록 불러오기
 npy_files = os.listdir(npy_data)
@@ -35,47 +35,49 @@ for npy_file in npy_files:
 
     data = np.load(file_path)
 
-    # 프레임 길이가 Slicing Seq보다 길다면
-    if len(data) > seq_length:
-        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
-        full_seq_data = np.array(full_seq_data)
-        print(full_seq_data.shape)
+    # 시퀀스 길이보다 데이터 길이가 작은 경우 패딩 적용
+    if len(data) < seq_length:
+        padding_length = seq_length - len(data)
+        # 시퀀스의 부족한 부분을 0으로 채움
+        data = np.pad(data, ((0, padding_length), (0, 0)), mode='constant')
 
-        # 예측
-        y_pred = model.predict(full_seq_data)
+    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
+    full_seq_data = np.array(full_seq_data)
+    print(full_seq_data.shape)
 
-        # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
-        predicted_classes = []
-        for pred in y_pred:
-            max_prob = np.max(pred)
-            if max_prob >= 0.90:
-                predicted_class = np.argmax(pred)
-                predicted_classes.append(predicted_class)
+    # 예측
+    y_pred = model.predict(full_seq_data)
 
-        print(predicted_classes)
+    # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
+    predicted_classes = []
+    for pred in y_pred:
+        predicted_class = np.argmax(pred)
+        predicted_classes.append(predicted_class)
 
-        # 다수결 투표 방식으로 최종 예측 결정
-        if predicted_classes:  # predicted_classes가 비어있지 않은 경우에만 처리
-            vote_counts = Counter(predicted_classes)
-            final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
-            action = actions[final_prediction]
+    print(predicted_classes)
 
-            # 정답 출력/개수 계산
-            print("예측결과: ", action)
-            print("정답: ", base_name)
-            if action in base_name:
-                correct_count += 1
-                action_correct_counts[action] += 1
-                if "flip" in base_name:
-                    flip_correct_count += 1
+    # 다수결 투표 방식으로 최종 예측 결정
+    if predicted_classes:  # predicted_classes가 비어있지 않은 경우에만 처리
+        vote_counts = Counter(predicted_classes)
+        final_prediction, final_prediction_count = vote_counts.most_common(1)[0]
+        action = actions[final_prediction]
 
-        else:
-            print("신뢰도가 낮습니다.")
-            print("정답: ", base_name)
+        # 정답 출력/개수 계산
+        print("예측결과: ", action)
+        print("정답: ", base_name)
+        if action in base_name:
+            correct_count += 1
+            action_correct_counts[action] += 1
+            if "flip" in base_name:
+                flip_correct_count += 1
 
-        # 예측값을 넘파이 파일로 저장
-        # save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
-        # np.save(save_path, y_pred)
+    else:
+        print("신뢰도가 낮습니다.")
+        print("정답: ", base_name)
+
+    # 예측값을 넘파이 파일로 저장
+    # save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
+    # np.save(save_path, y_pred)
 
 print("")
 print("결과")
