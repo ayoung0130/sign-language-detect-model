@@ -93,10 +93,6 @@ for video_file in video_files:
         print("신뢰도가 낮습니다.")
         print("정답: ", base_name)
 
-    # # 예측값을 넘파이 파일로 저장
-    # save_path = os.path.join(base_dir, f"pred/{base_name}_{action}.npy")
-    # np.save(save_path, y_pred)
-
 cv2.destroyAllWindows()
 
 print("")
