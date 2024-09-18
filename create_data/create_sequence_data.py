@@ -19,7 +19,7 @@ for folder_name in folder_names:
     count = 0
 
     for idx in idx_list:
-        folder_path = os.path.join(base_dir, f"{folder_name}")
+        folder_path = os.path.join(base_dir, f"{folder_name}/{idx}")
 
         for npy_file in os.listdir(folder_path):
             # 파일 불러오기
