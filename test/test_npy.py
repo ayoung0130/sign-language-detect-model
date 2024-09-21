@@ -11,7 +11,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model.keras')
+model = load_model('models/model_10words_100.keras')
  
 # 넘파이 파일 설정
 npy_data = os.path.join(base_dir, 'test_10words')
