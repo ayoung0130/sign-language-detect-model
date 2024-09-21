@@ -19,6 +19,7 @@ action = "수어 동작을 시작하세요"
 data = []
 
 # 단어 예측을 위한 리스트 초기화
+predicted_classes = []
 predicted_words = []
 
 while cap.isOpened():
@@ -49,29 +50,22 @@ while cap.isOpened():
         y_pred = model.predict(full_seq_data)
 
         # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
-        predicted_classes = []
         for pred in y_pred:
-            max_prob = np.max(pred)
-            if max_prob >= 0.90:
-                predicted_class = np.argmax(pred)
-                predicted_classes.append(predicted_class)
-
-        print(predicted_classes)
-
-        # 예측된 레이블 카운트
-        label_counts = Counter(predicted_classes)
-
-        # 다섯 번 이상 나온 레이블만 선택
-        filtered_labels = [label for label, count in label_counts.items() if count >= 5]
+            predicted_class = np.argmax(pred)
+            predicted_classes.append(predicted_class)
 
         # 선택된 레이블을 단어로 변환
-        for label in filtered_labels:
+        for label in predicted_classes:
             predicted_words.append(actions[label])
+
+        print(predicted_words)
 
         tts(words_to_sentence(predicted_words))
 
         # 데이터 초기화
         data = []
+        predicted_words = []
+        predicted_classes = []
         
     # 화면에 표시
     cv2.imshow('MediaPipe', frame)
