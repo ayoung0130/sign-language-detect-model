@@ -1,10 +1,10 @@
 import cv2
 import numpy as np
+import threading
 from setting import actions, seq_length, jumping_window, font
 from keras.models import load_model
 from PIL import ImageDraw, Image
 from data_processing.landmark_processing import get_landmarks
-from collections import Counter
 from llm_tts import words_to_sentence, tts
 
 # 웹캠으로 모델 예측을 수행하는 코드 (문장 단위)
@@ -36,14 +36,15 @@ while cap.isOpened():
     # 랜드마크, 프레임 가져오기
     d, frame = get_landmarks(frame)
 
+    # 손 검출시
     if d is not None:
-        # 전체 데이터 배열에 추가
         data.append(d)
 
+    # 손이 화면에서 벗어나고 데이터 길이가 시퀀스 길이보다 길다면
     elif len(data) > seq_length:
         data = np.array(data)
 
-        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
+        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 5)]
         full_seq_data = np.array(full_seq_data)
 
         # 예측
@@ -60,12 +61,23 @@ while cap.isOpened():
 
         print(predicted_words)
 
-        tts(words_to_sentence(predicted_words))
+        # 문장 변환, 화면에 출력
+        sentence = words_to_sentence(predicted_words)
+        action = sentence
+
+        # TTS 비동기 처리 시작 (별도의 스레드에서 실행)
+        tts_thread = threading.Thread(target=tts, args=(sentence,))
+        tts_thread.start()
 
         # 데이터 초기화
         data = []
         predicted_words = []
         predicted_classes = []
+
+    # 손이 화면에서 벗어났지만 데이터 길이가 시퀀스 길이보다 짧다면
+    elif len(data) > 0:
+        action = "동작을 더 길게 수행해주세요"
+        data = []
         
     # 화면에 표시
     cv2.imshow('MediaPipe', frame)

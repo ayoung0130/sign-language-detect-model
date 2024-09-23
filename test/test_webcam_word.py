@@ -9,7 +9,7 @@ from collections import Counter
 # 웹캠으로 모델 예측을 수행하는 코드 (단어 단위)
 
 # 모델 불러오기
-model = load_model('models/model_10words_100.keras')
+model = load_model('models/model.keras')
 
 # 웹캠 설정
 cap = cv2.VideoCapture(0)
@@ -31,11 +31,13 @@ while cap.isOpened():
     # 랜드마크, 프레임 가져오기
     d, frame = get_landmarks(frame)
 
+    # 손 검출시
     if d is not None:
-        # 전체 데이터 배열에 추가
         data.append(d)
 
+    # 손이 화면에서 벗어나고 데이터 길이가 시퀀스 길이보다 길다면
     elif len(data) > seq_length:
+        
         data = np.array(data)
 
         full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
@@ -64,6 +66,7 @@ while cap.isOpened():
         data = []
         
     elif len(data) > 0:
+        # 손이 화면에서 벗어났지만 데이터 길이가 시퀀스 길이보다 짧다면
         action = "동작을 더 길게 수행해주세요"
         data = []
     
