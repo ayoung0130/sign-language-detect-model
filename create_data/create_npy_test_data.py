@@ -9,10 +9,10 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"test_video_30words")
+folder_path = os.path.join(base_dir, f"test_video_10words")
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "test_30words")
+save_path = os.path.join(base_dir, "test_10words")
 
 # flip 여부를 결정하는 리스트
 flip_options = [False, True]

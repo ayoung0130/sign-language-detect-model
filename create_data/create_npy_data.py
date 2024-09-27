@@ -11,14 +11,14 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, f"npy")
-flip_save_path = os.path.join(base_dir, f"npy_flip")
+save_path = os.path.join(base_dir, f"npy/0_9")
+flip_save_path = os.path.join(base_dir, f"npy_flip/0_9")
 
 # flip 여부를 결정하는 리스트
 flip_options = [False, True]
 
 for flip in flip_options:
-    for idx in range(29, 30):
+    for idx in range(0, 10):
         action = actions[idx]
         folder_path = os.path.join(base_dir, f"video/resized_video_{idx}")
         video_num = 0
