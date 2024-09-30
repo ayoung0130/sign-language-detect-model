@@ -39,11 +39,11 @@ def get_landmarks(frame):
         # 포즈 랜드마크 그리기
         mp_drawing.draw_landmarks(frame, results_pose.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
-        right_hand_angle = angle_hands(joint_right_hands)
         left_hand_angle = angle_hands(joint_left_hands)
+        right_hand_angle = angle_hands(joint_right_hands)
         pose_angle = angle_pose(joint_pose)
 
-        joint = np.concatenate([joint_left_hands.flatten(), joint_right_hands.flatten(), joint_pose.flatten(), right_hand_angle, left_hand_angle, pose_angle])
+        joint = np.concatenate([joint_left_hands.flatten(), joint_right_hands.flatten(), joint_pose.flatten(), left_hand_angle, right_hand_angle, pose_angle])
 
         return joint, frame
     

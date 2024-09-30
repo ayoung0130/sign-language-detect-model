@@ -7,15 +7,16 @@ from dotenv import load_dotenv
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model.keras')
+model = load_model('models/model_20words_90.keras')
  
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, 'test_30words')
+npy_data = os.path.join(base_dir, 'test_20words')
 
 # 동영상 파일 목록 불러오기
 npy_files = os.listdir(npy_data)
@@ -64,7 +65,6 @@ for npy_file in npy_files:
         y_pred.append(final_prediction)  # 예측 클래스
 
 # Confusion Matrix 생성
-# 신뢰도가 낮아도 표시되도록
 cm = confusion_matrix(y_true, y_pred)
 
 # Confusion Matrix를 확률로 변환 (전체 예측 수로 나누기)
