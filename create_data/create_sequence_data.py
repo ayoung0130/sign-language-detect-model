@@ -9,7 +9,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 folder_names = ["npy", "npy_flip", "npy_shift", "npy_flip_shift"]   # "npy", "npy_flip", "npy_shift", "npy_flip_shift" / "ft", "ft_flip", "ft_shift", "ft_flip_shift"
-idx_list = ["0_9", "10_19"]  #"0_9", "10_19", "20_29", "30_39", "40_49"
+idx_list = ["0_9"]  #"0_9", "10_19", "20_29", "30_39", "40_49"
 
 seq_save_path = os.path.join(base_dir, "seq_data")   # seq_data / ft_seq_data
 
