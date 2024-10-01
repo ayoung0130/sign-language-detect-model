@@ -11,8 +11,8 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, f"npy/0_9")
-flip_save_path = os.path.join(base_dir, f"npy_flip/0_9")
+save_path = os.path.join(base_dir, f"npy/test")
+flip_save_path = os.path.join(base_dir, f"npy_flip/test")
 
 # flip 여부를 결정하는 리스트
 flip_options = [False, True]

@@ -12,7 +12,7 @@ base_dir = os.getenv('BASE_DIR')
 folder_path = os.path.join(base_dir, f"test_video_20words")
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "test_10words")
+save_path = os.path.join(base_dir, "test_20")
 
 # flip 여부를 결정하는 리스트
 flip_options = [False, True]
