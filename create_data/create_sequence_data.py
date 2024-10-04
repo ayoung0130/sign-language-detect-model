@@ -26,6 +26,12 @@ for folder_name in folder_names:
             file_path = os.path.join(folder_path, npy_file)
             data = np.load(file_path)
 
+            # 시퀀스 길이보다 데이터 길이가 작은 경우 패딩 적용
+            if len(data) < seq_length:
+                padding_length = seq_length - len(data)
+                # 시퀀스의 부족한 부분을 0으로 채움
+                data = np.pad(data, ((0, padding_length), (0, 0)), mode='constant')
+
             # 시퀀스 데이터 생성
             data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
             data = np.array(data)

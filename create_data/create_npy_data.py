@@ -15,7 +15,7 @@ save_path = os.path.join(base_dir, f"npy/test")
 flip_save_path = os.path.join(base_dir, f"npy_flip/test")
 
 # flip 여부를 결정하는 리스트
-flip_options = [False, True]
+flip_options = [True]
 
 for flip in flip_options:
     for idx in range(0, 10):
@@ -49,16 +49,16 @@ for flip in flip_options:
                     break
 
             data = np.array(data)
-            print(f"data[5]: {data[5]}")
+            print(f"data[1]: {data[1]}")
             print(f"data shape: {action}, {data.shape}")
             
             # 데이터 저장
             created_time = int(time.time())
 
             if flip:
-                np.save(os.path.join(flip_save_path, f'flip_{action}_{created_time}'), data)
+                np.save(os.path.join(flip_save_path, f'{video_num}_flip_{action}_{created_time}'), data)
             else :
-                np.save(os.path.join(save_path, f'{action}_{created_time}'), data)
+                np.save(os.path.join(save_path, f'{video_num}_{action}_{created_time}'), data)
 
         print(f"영상 개수: {video_num}")
 
