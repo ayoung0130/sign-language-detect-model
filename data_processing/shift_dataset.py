@@ -24,12 +24,10 @@ def shift_data():
 
             # print(f"{base_name} {scale} shift 전: ", data[100, 0:5])
 
-            # only landmarks
-            # 0번 인덱스부터 186번 인덱스까지
-            for x in range(0, 187, 3):
+            # shift
+            for x in range(0, 188, 3):
                 data[:, x] = data[:, x] * scale # (x 좌표값) * (이동시킬 퍼센테이지)
             
-            # 1번 인덱스부터 187번 인덱스까지
             for y in range(1, 188, 3):
                 data[:, y] = data[:, y] * scale # (y 좌표값) * (이동시킬 퍼센테이지)
 

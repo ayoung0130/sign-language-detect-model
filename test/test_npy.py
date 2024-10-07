@@ -12,9 +12,9 @@ base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
 model = load_model('models/model.keras')
- 
+
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, 'test_20words')
+npy_data = os.path.join(base_dir, 'test')
 
 # 동영상 파일 목록 불러오기
 npy_files = os.listdir(npy_data)
