@@ -14,14 +14,14 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model.keras')
 
 # 넘파이 파일 설정
-npy_data = os.path.join(base_dir, 'test')
+npy_data = os.path.join(base_dir, 'test_20words')
 
 # 동영상 파일 목록 불러오기
 npy_files = os.listdir(npy_data)
 random.shuffle(npy_files)
 npy_file_count = len(npy_files)
 flip_npy_file_count = len([file for file in npy_files if "flip" in file])
-
+                                              
 correct_count = 0
 flip_correct_count = 0
 
