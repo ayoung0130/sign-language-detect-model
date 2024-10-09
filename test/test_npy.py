@@ -21,7 +21,7 @@ npy_files = os.listdir(npy_data)
 random.shuffle(npy_files)
 npy_file_count = len(npy_files)
 flip_npy_file_count = len([file for file in npy_files if "flip" in file])
-                                              
+
 correct_count = 0
 flip_correct_count = 0
 
@@ -41,7 +41,7 @@ for npy_file in npy_files:
         # 시퀀스의 부족한 부분을 0으로 채움
         data = np.pad(data, ((0, padding_length), (0, 0)), mode='constant')
 
-    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, jumping_window)]
+    full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
     full_seq_data = np.array(full_seq_data)
     print(full_seq_data.shape)
 
