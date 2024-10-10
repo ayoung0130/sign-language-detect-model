@@ -14,7 +14,7 @@ base_dir = os.getenv('BASE_DIR')
 model = load_model('models/model.keras')
 
 # 폴더 목록
-folders = ["0_9", "10_19", "20_29", "30_39", "40_52"]  # "0_9", "10_19", "20_29", "30_39", "40_52"
+folders = ["0_9", "10_19"]  # "0_9", "10_19", "20_29", "30_39", "40_52"
 
 correct_count = 0
 flip_correct_count = 0
