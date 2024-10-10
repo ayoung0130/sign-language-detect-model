@@ -9,10 +9,10 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"test_video_10words/1_2")
+folder_path = os.path.join(base_dir, f"test_video_53words")
 
 # 데이터 저장 경로
-save_path = os.path.join(base_dir, "test")
+save_path = os.path.join(base_dir, "test_npy/40_52")
 
 # flip 여부를 결정하는 리스트
 flip_options = [False, True]
@@ -51,7 +51,7 @@ for flip in flip_options:
 
         # 넘파이 배열로 생성
         data = np.array(data)
-        print("data[10]: ", data[10])
+        print("data[1]: ", data[1])
         print("data shape: ", data.shape)
 
         # 넘파이 데이터 저장

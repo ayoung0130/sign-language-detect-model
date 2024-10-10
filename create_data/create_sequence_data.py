@@ -9,7 +9,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 folder_names = ["npy", "npy_flip", "npy_shift", "npy_flip_shift"]   # "npy", "npy_flip", "npy_shift", "npy_flip_shift" / "ft", "ft_flip", "ft_shift", "ft_flip_shift"
-idx_list = ["0_9", "10_19", "20_29"]  #"0_9", "10_19", "20_29", "30_39", "40_49"
+idx_list = ["0_9", "10_19", "20_29", "30_39", "40_52"]  #"0_9", "10_19", "20_29", "30_39", "40_52"
 
 seq_save_path = os.path.join(base_dir, "seq_data")   # seq_data / ft_seq_data
 
@@ -24,7 +24,7 @@ for folder_name in folder_names:
         for npy_file in os.listdir(folder_path):
             # 파일 불러오기
             file_path = os.path.join(folder_path, npy_file)
-            data = np.load(file_path)
+            data = np.load(file_path).astype(np.float32)
 
             # 시퀀스 길이보다 데이터 길이가 작은 경우 패딩 적용
             if len(data) < seq_length:
