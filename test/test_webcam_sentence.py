@@ -10,7 +10,7 @@ from llm_tts import words_to_sentence, tts
 # 웹캠으로 모델 예측을 수행하는 코드 (문장 단위)
 
 # 모델 불러오기
-model = load_model('models/model.keras')
+model = load_model('models/model_40words.keras')
 
 # 웹캠 설정
 cap = cv2.VideoCapture(0)
