@@ -19,7 +19,7 @@ action = "수어 동작을 시작하세요"
 data = []
 
 # 단어 예측을 위한 리스트 초기화
-predicted_classes = []
+predicted_class = []
 predicted_words = []
 
 while cap.isOpened():
@@ -40,44 +40,73 @@ while cap.isOpened():
     if d is not None:
         data.append(d)
 
-    # 손이 화면에서 벗어나고 데이터 길이가 시퀀스 길이보다 길다면
-    elif len(data) > seq_length:
-        data = np.array(data)
+        if len(data) == seq_length:
+            data = np.array(data)   # (20, 234)
+            seq_data = np.expand_dims(data, axis=0)  # (1, 20, 234)
 
-        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 5)]
-        full_seq_data = np.array(full_seq_data)
+            y_pred = model.predict(seq_data)
 
-        # 예측
-        y_pred = model.predict(full_seq_data)
+            predicted_class = np.argmax(y_pred)
+            predicted_words.append(actions[predicted_class])
+            print(predicted_words)
 
-        # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
-        for pred in y_pred:
-            predicted_class = np.argmax(pred)
-            predicted_classes.append(predicted_class)
-
-        # 선택된 레이블을 단어로 변환
-        for label in predicted_classes:
-            predicted_words.append(actions[label])
-
-        print(predicted_words)
-
-        # 문장 변환, 화면에 출력
+            data = []
+    
+    # 손이 내려가고 predicted words가 존재할 때
+    elif predicted_words:
+        #문장 변환, 화면에 출력
         sentence = words_to_sentence(predicted_words)
         action = sentence
-
-        # TTS 비동기 처리 시작 (별도의 스레드에서 실행)
-        tts_thread = threading.Thread(target=tts, args=(sentence,))
-        tts_thread.start()
 
         # 데이터 초기화
         data = []
         predicted_words = []
         predicted_classes = []
 
-    # 손이 화면에서 벗어났지만 데이터 길이가 시퀀스 길이보다 짧다면
+    # 손이 내려갔지만 predicted words가 존재하지 않을 때
     elif len(data) > 0:
         action = "동작을 더 길게 수행해주세요"
         data = []
+
+
+    # # 손이 화면에서 벗어나고 데이터 길이가 시퀀스 길이보다 길다면
+    # elif len(data) > seq_length:
+    #     data = np.array(data)
+
+    #     full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 5)]
+    #     full_seq_data = np.array(full_seq_data)
+
+    #     # 예측
+    #     y_pred = model.predict(full_seq_data)
+
+    #     # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
+    #     for pred in y_pred:
+    #         predicted_class = np.argmax(pred)
+    #         predicted_classes.append(predicted_class)
+
+    #     # 선택된 레이블을 단어로 변환
+    #     for label in predicted_classes:
+    #         predicted_words.append(actions[label])
+
+    #     print(predicted_words)
+
+    #     # 문장 변환, 화면에 출력
+    #     sentence = words_to_sentence(predicted_words)
+    #     action = sentence
+
+    #     # TTS 비동기 처리 시작 (별도의 스레드에서 실행)
+    #     tts_thread = threading.Thread(target=tts, args=(sentence,))
+    #     tts_thread.start()
+
+    #     # 데이터 초기화
+    #     data = []
+    #     predicted_words = []
+    #     predicted_classes = []
+
+    # # 손이 화면에서 벗어났지만 데이터 길이가 시퀀스 길이보다 짧다면
+    # elif len(data) > 0:
+    #     action = "동작을 더 길게 수행해주세요"
+    #     data = []
         
     # 화면에 표시
     cv2.imshow('MediaPipe', frame)

@@ -18,14 +18,17 @@ def get_landmarks(frame):
         joint_left_hands = np.zeros((21, 3))
         joint_right_hands = np.zeros((21, 3))
         joint_pose = np.zeros((21, 3))
-
+        
         # 손 랜드마크 처리
-        for res, handedness in zip(results_hands.multi_hand_landmarks, results_hands.multi_handedness):
-            # 손 -> 모든 관절에 대해 반복. 한 프레임에 왼손, 오른손 데이터가 0번부터 20번까지 들어감
-            for j, lm in enumerate(res.landmark):
-                if handedness.classification[0].label == 'Left':
+        for hand_idx, res in enumerate(results_hands.multi_hand_landmarks):
+            handedness = results_hands.multi_handedness[hand_idx]  # 각 손의 handedness
+
+            # 각 손에 대해 21개 랜드마크 처리
+            if handedness.classification[0].label == 'Left':
+                for j, lm in enumerate(res.landmark):
                     joint_left_hands[j] = [lm.x, lm.y, lm.z]
-                else:
+            elif handedness.classification[0].label == 'Right':
+                for j, lm in enumerate(res.landmark):
                     joint_right_hands[j] = [lm.x, lm.y, lm.z]
 
             # 손 랜드마크 그리기
