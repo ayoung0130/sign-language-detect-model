@@ -11,10 +11,10 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model.keras')
+model = load_model('models/model_40words.keras')
 
 # 폴더 목록
-folders = ["0_9", "10_19", "20_29", "30_39", "40_44"]  # "0_9", "10_19", "20_29", "30_39", "40_52"
+folders = ["0_9", "10_19", "20_29", "30_39"]  # "0_9", "10_19", "20_29", "30_39", "40_52"
 
 correct_count = 0
 flip_correct_count = 0
@@ -84,8 +84,6 @@ print("결과")
 # 각 action별 정답 확률 출력
 for action, correct in action_correct_counts.items():
     word_count = 6
-    if "오른쪽" in action or "왼쪽" in action:
-        word_count = 3
     accuracy = (correct / word_count) * 100
     print(f"{action} --> {accuracy:.2f}% ({correct} / {word_count})")
 

@@ -8,10 +8,10 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_names = ["npy", "npy_flip", "npy_shift", "npy_flip_shift"]   # "npy", "npy_flip", "npy_shift", "npy_flip_shift" / "npy0", "npy0_flip", "npy0_shift", "npy0_flip_shift"
-idx_list = ["0_9", "10_19", "20_29", "30_39"]  #"0_9", "10_19", "20_29", "30_39", "40_52"
+folder_names = ["npy", "npy_flip", "npy_shift", "npy_flip_shift"]   # "npy", "npy_flip", "npy_shift", "npy_flip_shift"
+idx_list = ["0_9", "10_19", "20_29", "30_39"]  #"0_9", "10_19", "20_29", "30_39"
 
-seq_save_path = os.path.join(base_dir, "seq_data/40_words")   # seq_data / seq_data0
+seq_save_path = os.path.join(base_dir, "seq_data")   # seq_data
 
 for folder_name in folder_names:
 

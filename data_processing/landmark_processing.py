@@ -19,11 +19,11 @@ def get_landmarks(frame):
         joint_right_hands = np.zeros((21, 3))
         joint_pose = np.zeros((21, 3))
         
-        # 손 랜드마크 처리
+        # 손 랜드마크 처리  /   hand_idx: 0-왼손, 1-오른손
         for hand_idx, res in enumerate(results_hands.multi_hand_landmarks):
             handedness = results_hands.multi_handedness[hand_idx]  # 각 손의 handedness
 
-            # 각 손에 대해 21개 랜드마크 처리
+            # 각 손에 따른 처리
             if handedness.classification[0].label == 'Left':
                 for j, lm in enumerate(res.landmark):
                     joint_left_hands[j] = [lm.x, lm.y, lm.z]
