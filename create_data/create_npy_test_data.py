@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
-folder_path = os.path.join(base_dir, f"new")
+folder_path = os.path.join(base_dir, f"")
 
 # 데이터 저장 경로
 save_path = os.path.join(base_dir, "test_npy/30_39")

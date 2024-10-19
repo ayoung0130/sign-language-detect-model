@@ -9,8 +9,8 @@ base_dir = os.getenv('BASE_DIR')
 
 # "npy" "npy_flip"
 original = "npy_flip"
-folder_path = os.path.join(base_dir, f'{original}/0_9')              # 0_9 10_19 20_29 30_39
-save_path = os.path.join(base_dir, f'{original}_shift/0_9')
+folder_path = os.path.join(base_dir, f'{original}/new_data')              # 0_9 10_19 20_29 30_39 new_data
+save_path = os.path.join(base_dir, f'{original}_shift/new_data')
 
 def shift_data():
     scales = [0.9, 1.1]
