@@ -11,7 +11,7 @@ load_dotenv()
 base_dir = os.getenv('BASE_DIR')
 
 # 모델 불러오기
-model = load_model('models/model.keras')
+model = load_model('models/model_best.keras')
 
 # 폴더 목록
 folders = ["0_9", "10_19", "20_29", "30_39"]  # "0_9", "10_19", "20_29", "30_39", "40_52"
