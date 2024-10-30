@@ -18,7 +18,7 @@ flip_save_path = os.path.join(base_dir, f"npy_with_test_flip")
 flip_options = [False, True]
 
 for flip in flip_options:
-    for idx in range(0, 39):
+    for idx in range(39, 40):
         action = actions[idx]
         folder_path = os.path.join(base_dir, f"video_40_with_test/resized_video_{idx}")
         video_num = 0
