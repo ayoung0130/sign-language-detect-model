@@ -47,7 +47,7 @@ for folder in folders:
             data = np.pad(data, ((0, padding_length), (0, 0)), mode='constant')
 
         # 분할하여 시퀀스 데이터로 변환
-        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 10)]
+        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 5)]
         full_seq_data = np.array(full_seq_data)
         print(full_seq_data.shape)
 

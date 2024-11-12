@@ -22,8 +22,8 @@ actions = ['가렵다', '기절', '부러지다', '어제', '어지러움', '열
            '수요일', '목요일', '금요일', '토요일', '일요일', '적 있다', '화상', '병원', '끝', '의사' ]
 
 # 윈도우 사이즈
-seq_length = 20
-jumping_window = 10
+seq_length = 15
+jumping_window = 5
 
 # 폰트 설정
 font = ImageFont.truetype('fonts/NanumGothicBold.ttf', 25)
