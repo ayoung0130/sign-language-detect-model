@@ -5,7 +5,7 @@ from keras.models import load_model
 from collections import Counter
 from dotenv import load_dotenv
 
-# numpy 파일로 모델 예측을 수행하는 코드
+# numpy 파일로 모델 예측을 수행하는 코드 
 
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
