@@ -7,11 +7,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 base_dir = os.getenv('BASE_DIR')
-
-folder_names = ["npy_with_test", "npy_with_test_flip", "npy_with_test_shift", "npy_with_test_flip_shift"]   # "npy", "npy_flip", "npy_shift", "npy_flip_shift"
+# "npy", "npy_flip", "npy_shift", "npy_flip_shift" / "npy_with_test" "npy_with_test_flip", "npy_with_test_shift", "npy_with_test_flip_shift"
+folder_names = ["npy", "npy_flip", "npy_shift", "npy_flip_shift"]
 idx_list = ["0_9", "10_19", "20_29", "30_39"]  #"0_9", "10_19", "20_29", "30_39", "new_data"
 
-seq_save_path = os.path.join(base_dir, "seq_data_with_test")   # seq_data
+seq_save_path = os.path.join(base_dir, "seq_data")   # "seq_data", "seq_data_with_test"
 
 for folder_name in folder_names:
 
@@ -49,3 +49,4 @@ for folder_name in folder_names:
     np.save(os.path.join(seq_save_path, f'seq_{folder_name}_{created_time}_{seq_length}_{jumping_window}'), full_seq_data)
     print("full seq data shape:",  full_seq_data.shape)
     print(f"npy 파일 개수: {count}개")
+    
