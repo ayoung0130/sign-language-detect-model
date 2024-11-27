@@ -68,45 +68,44 @@ while cap.isOpened():
         action = "동작을 더 길게 수행해주세요"
         data = []
 
+    # 손이 화면에서 벗어나고 데이터 길이가 시퀀스 길이보다 길다면
+    elif len(data) > seq_length:
+        data = np.array(data)
 
-    # # 손이 화면에서 벗어나고 데이터 길이가 시퀀스 길이보다 길다면
-    # elif len(data) > seq_length:
-    #     data = np.array(data)
+        full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 5)]
+        full_seq_data = np.array(full_seq_data)
 
-    #     full_seq_data = [data[seq:seq + seq_length] for seq in range(0, len(data) - seq_length + 1, 5)]
-    #     full_seq_data = np.array(full_seq_data)
+        # 예측
+        y_pred = model.predict(full_seq_data)
 
-    #     # 예측
-    #     y_pred = model.predict(full_seq_data)
+        # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
+        for pred in y_pred:
+            predicted_class = np.argmax(pred)
+            predicted_classes.append(predicted_class)
 
-    #     # 각 시퀀스의 가장 높은 확률을 가지는 클래스와 해당 확률 선택
-    #     for pred in y_pred:
-    #         predicted_class = np.argmax(pred)
-    #         predicted_classes.append(predicted_class)
+        # 선택된 레이블을 단어로 변환
+        for label in predicted_classes:
+            predicted_words.append(actions[label])
 
-    #     # 선택된 레이블을 단어로 변환
-    #     for label in predicted_classes:
-    #         predicted_words.append(actions[label])
+        print(predicted_words)
 
-    #     print(predicted_words)
+        # 문장 변환, 화면에 출력
+        sentence = words_to_sentence(predicted_words)
+        action = sentence
 
-    #     # 문장 변환, 화면에 출력
-    #     sentence = words_to_sentence(predicted_words)
-    #     action = sentence
+        # TTS 비동기 처리 시작 (별도의 스레드에서 실행)
+        tts_thread = threading.Thread(target=tts, args=(sentence,))
+        tts_thread.start()
 
-    #     # TTS 비동기 처리 시작 (별도의 스레드에서 실행)
-    #     tts_thread = threading.Thread(target=tts, args=(sentence,))
-    #     tts_thread.start()
+        # 데이터 초기화
+        data = []
+        predicted_words = []
+        predicted_classes = []
 
-    #     # 데이터 초기화
-    #     data = []
-    #     predicted_words = []
-    #     predicted_classes = []
-
-    # # 손이 화면에서 벗어났지만 데이터 길이가 시퀀스 길이보다 짧다면
-    # elif len(data) > 0:
-    #     action = "동작을 더 길게 수행해주세요"
-    #     data = []
+    # 손이 화면에서 벗어났지만 데이터 길이가 시퀀스 길이보다 짧다면
+    elif len(data) > 0:
+        action = "동작을 더 길게 수행해주세요"
+        data = []
         
     # 화면에 표시
     cv2.imshow('MediaPipe', frame)
